@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhamento de Paginação de Cobertura</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Área de Parâmetros de Entrada -->
+        <div class="input-area">
+            <h2>Parâmetros de Entrada</h2>
+            <label for="comprimentoArea">Comprimento da Área Coberta:</label>
+            <input type="text" id="comprimentoArea" placeholder="Comprimento (m)">
+            
+            <label for="larguraArea">Largura da Área Coberta:</label>
+            <input type="text" id="larguraArea" placeholder="Largura (m)">
+            
+            <label for="comprimentoRevestimento">Comprimento do Revestimento:</label>
+            <input type="text" id="comprimentoRevestimento" placeholder="Comprimento (m)">
+            
+            <label for="larguraRevestimento">Largura do Revestimento:</label>
+            <input type="text" id="larguraRevestimento" placeholder="Largura (m)">
+            
+            <label>
+                <input type="checkbox" id="inverterSentido"> Inverter Sentido de Paginação
+            </label>
+            
+            <button onclick="processar()">Processar</button>
+        </div>
+
+        <!-- Área de Visualização -->
+        <div class="visualizacao-area">
+            <h2>Área Coberta e Revestimento</h2>
+            <div id="areaCoberta"></div>
+        </div>
+
+        <!-- Área de Legenda -->
+        <div class="legenda-area">
+            <h2>Legenda</h2>
+            <div id="legenda"></div>
+        </div>
+    </div>
+
+    <!-- Modal de Seleção de Cores -->
+    <div id="colorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Selecione uma Cor</h2>
+            <div id="colorPalette"></div>
+            <div id="selectedColorPreview"></div>
+            <button id="confirmColor">Alterar Cor</button>
+            <button id="cancelColor">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
