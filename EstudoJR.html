@@ -20,7 +20,7 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: white;
+            background-color: #F0F0F0;
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -197,14 +197,14 @@
             // Seleciona uma cor e forma aleatórias
             currentColor = colors[Math.floor(Math.random() * colors.length)];
             currentShape = shapes[Math.floor(Math.random() * shapes.length)];
+
+            // Remove qualquer conteúdo anterior
+            shapeElement.innerHTML = "";
+            shapeElement.style.backgroundColor = "";
             
             // Configura a forma visual
             shapeElement.className = "shape";
             shapeElement.classList.add(currentShape);
-            
-            // Remove qualquer conteúdo anterior
-            shapeElement.innerHTML = "";
-            shapeElement.style.backgroundColor = "";
             
             if (currentShape === "star" || currentShape === "heart") {
                 // Para estrela e coração, usamos emojis coloridos
