@@ -216,15 +216,15 @@
             shapeElement.style.borderBottomColor = "";
             
             if (currentShape === "star") {
-                shapeElement.style.color = currentColor.hex;
+                shapeElement.style.color = currentColor.name;
                 shapeElement.textContent = "★";
             } else if (currentShape === "heart") {
-                shapeElement.style.color = currentColor.hex;
+                shapeElement.style.color = currentColor.name;
                 shapeElement.textContent = "❤";
             } else if (currentShape === "triangle") {
-                shapeElement.style.borderBottomColor = currentColor.hex;
+                shapeElement.style.borderBottomColor = currentColor.name;
             } else {
-                shapeElement.style.backgroundColor = currentColor.hex;
+                shapeElement.style.backgroundColor = currentColor.name;
             }
             
             // Configura a pergunta
