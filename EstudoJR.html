@@ -181,7 +181,7 @@
             currentShape = shapes[Math.floor(Math.random() * shapes.length)];
             
             // Configura a forma visual
-            shapeElement.style.backgroundColor = currentColor.name;
+            shapeElement.style.backgroundColor = currentColor.key;
             shapeElement.className = "shape";
             shapeElement.classList.add(currentShape);
             
@@ -243,11 +243,11 @@
                 border-left: 75px solid transparent;
                 border-right: 75px solid transparent;
                 border-bottom: 150px solid;
-                background-color: transparent !important;
+                
             }
             
             .star {
-                background-color: transparent !important;
+                
                 position: relative;
                 font-size: 40px;
             }
@@ -258,7 +258,7 @@
             }
             
             .heart {
-                background-color: transparent !important;
+                
                 position: relative;
                 font-size: 40px;
             }
