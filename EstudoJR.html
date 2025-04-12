@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprenda Cores em Inglês</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #ff6b6b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .shape-container {
+            margin: 30px 0;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .shape {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+        
+        .question {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .input-container {
+            margin: 20px 0;
+        }
+        
+        input {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 20px;
+            padding: 10px 15px;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            outline: none;
+            transition: border 0.3s;
+        }
+        
+        input:focus {
+            border-color: #4dabf7;
+        }
+        
+        button {
+            background-color: #4dabf7;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        
+        button:hover {
+            background-color: #339af0;
+        }
+        
+        .message {
+            font-size: 28px;
+            margin: 20px 0;
+            min-height: 40px;
+        }
+        
+        .correct {
+            color: #2b8a3e;
+            font-weight: bold;
+        }
+        
+        .incorrect {
+            color: #c92a2a;
+            font-weight: bold;
+        }
+        
+        .feedback {
+            margin-top: 10px;
+            font-size: 20px;
+        }
+        
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .celebrate {
+            animation: celebrate 0.5s ease-in-out;
+            color: #fcc419;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Aprenda Cores em Inglês!</h1>
+        
+        <div class="shape-container">
+            <div class="shape" id="shape"></div>
+        </div>
+        
+        <div class="question" id="question"></div>
+        
+        <div class="input-container">
+            <input type="text" id="answer" placeholder="Digite a cor em inglês">
+            <button id="submit">Verificar</button>
+        </div>
+        
+        <div class="message" id="message"></div>
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <script>
+        // Cores e formas disponíveis
+        const colors = [
+            { name: "red", hex: "#ff6b6b" },
+            { name: "blue", hex: "#4dabf7" },
+            { name: "green", hex: "#40c057" },
+            { name: "yellow", hex: "#fcc419" },
+            { name: "orange", hex: "#ff922b" },
+            { name: "purple", hex: "#9775fa" },
+            { name: "pink", hex: "#f783ac" },
+            { name: "brown", hex: "#d68c45" },
+            { name: "black", hex: "#343a40" },
+            { name: "gray", hex: "#868e96" }
+        ];
+        
+        const shapes = ["circle", "square", "triangle", "rectangle", "star", "heart"];
+        
+        // Elementos do DOM
+        const shapeElement = document.getElementById("shape");
+        const questionElement = document.getElementById("question");
+        const answerInput = document.getElementById("answer");
+        const submitButton = document.getElementById("submit");
+        const messageElement = document.getElementById("message");
+        const feedbackElement = document.getElementById("feedback");
+        
+        // Variáveis de estado
+        let currentColor;
+        let currentShape;
+        
+        // Inicializa o jogo
+        function initGame() {
+            // Limpa mensagens anteriores
+            messageElement.textContent = "";
+            messageElement.className = "message";
+            feedbackElement.textContent = "";
+            
+            // Seleciona uma cor e forma aleatórias
+            currentColor = colors[Math.floor(Math.random() * colors.length)];
+            currentShape = shapes[Math.floor(Math.random() * shapes.length)];
+            
+            // Configura a forma visual
+            shapeElement.style.backgroundColor = currentColor.hex;
+            shapeElement.className = "shape";
+            shapeElement.classList.add(currentShape);
+            
+            // Configura a pergunta
+            questionElement.textContent = `What color is this ${currentShape}?`;
+            
+            // Limpa e foca no input
+            answerInput.value = "";
+            answerInput.focus();
+        }
+        
+        // Verifica a resposta
+        function checkAnswer() {
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            
+            if (userAnswer === "") return;
+            
+            if (userAnswer === currentColor.name) {
+                // Resposta correta
+                messageElement.textContent = "Congratulations! 🎉";
+                messageElement.className = "message celebrate";
+                feedbackElement.textContent = "";
+                
+                // Reinicia após 2 segundos
+                setTimeout(initGame, 2000);
+            } else {
+                // Resposta incorreta
+                messageElement.textContent = "Oh no! 😢";
+                messageElement.className = "message";
+                
+                feedbackElement.innerHTML = `
+                    You wrote: <span class="incorrect">${userAnswer}</span><br>
+                    Correct answer: <span class="correct">${currentColor.name}</span>
+                `;
+                
+                // Reinicia após 3 segundos
+                setTimeout(initGame, 3000);
+            }
+        }
+        
+        // Event listeners
+        submitButton.addEventListener("click", checkAnswer);
+        answerInput.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                checkAnswer();
+            }
+        });
+        
+        // Estilos dinâmicos para as formas
+        const style = document.createElement("style");
+        style.textContent = `
+            .circle {
+                border-radius: 50%;
+            }
+            
+            .triangle {
+                width: 0;
+                height: 0;
+                border-left: 75px solid transparent;
+                border-right: 75px solid transparent;
+                border-bottom: 150px solid;
+                background-color: transparent !important;
+            }
+            
+            .star {
+                background-color: transparent !important;
+                position: relative;
+                font-size: 40px;
+            }
+            
+            .star:before {
+                content: "★";
+                position: absolute;
+            }
+            
+            .heart {
+                background-color: transparent !important;
+                position: relative;
+                font-size: 40px;
+            }
+            
+            .heart:before {
+                content: "❤";
+                position: absolute;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Inicia o jogo
+        initGame();
+    </script>
+</body>
+</html>
