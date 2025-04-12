@@ -20,7 +20,7 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #f4f4f4;
+            background-color: white;
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -43,8 +43,26 @@
             font-size: 24px;
             font-weight: bold;
             color: white;
-            border: 2px solid #ddd;
             text-shadow: 1px 1px 2px black;
+        }
+        
+        .circle {
+            border-radius: 50%;
+        }
+        
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 75px solid transparent;
+            border-right: 75px solid transparent;
+            border-bottom: 150px solid;
+            background-color: transparent !important;
+        }
+        
+        .star, .heart {
+            background-color: transparent !important;
+            font-size: 100px; /* Tamanho maior para os emojis */
+            line-height: 150px; /* Centraliza verticalmente */
         }
         
         .question {
@@ -181,9 +199,21 @@
             currentShape = shapes[Math.floor(Math.random() * shapes.length)];
             
             // Configura a forma visual
-            shapeElement.style.backgroundColor = currentColor.key;
             shapeElement.className = "shape";
             shapeElement.classList.add(currentShape);
+            
+            // Remove qualquer conteúdo anterior
+            shapeElement.innerHTML = "";
+            shapeElement.style.backgroundColor = "";
+            
+            if (currentShape === "star" || currentShape === "heart") {
+                // Para estrela e coração, usamos emojis coloridos
+                shapeElement.style.color = currentColor.hex;
+                shapeElement.textContent = currentShape === "star" ? "★" : "❤";
+            } else {
+                // Para outras formas, usamos background-color
+                shapeElement.style.backgroundColor = currentColor.hex;
+            }
             
             // Configura a pergunta
             questionElement.textContent = `What color is this ${currentShape}?`;
@@ -229,46 +259,6 @@
                 checkAnswer();
             }
         });
-        
-        // Estilos dinâmicos para as formas
-        const style = document.createElement("style");
-        style.textContent = `
-            .circle {
-                border-radius: 50%;
-            }
-            
-            .triangle {
-                width: 0;
-                height: 0;
-                border-left: 75px solid transparent;
-                border-right: 75px solid transparent;
-                border-bottom: 150px solid;
-                
-            }
-            
-            .star {
-                
-                position: relative;
-                font-size: 40px;
-            }
-            
-            .star:before {
-                content: "★";
-                position: absolute;
-            }
-            
-            .heart {
-                
-                position: relative;
-                font-size: 40px;
-            }
-            
-            .heart:before {
-                content: "❤";
-                position: absolute;
-            }
-        `;
-        document.head.appendChild(style);
         
         // Inicia o jogo
         initGame();
