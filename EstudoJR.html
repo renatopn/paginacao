@@ -35,19 +35,26 @@
         }
         
         .shape {
-            width: 150px;
-            height: 150px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
             font-weight: bold;
-            color: white;
-            text-shadow: 1px 1px 2px black;
         }
         
         .circle {
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
+        }
+        
+        .square {
+            width: 150px;
+            height: 150px;
+        }
+        
+        .rectangle {
+            width: 200px;
+            height: 100px;
         }
         
         .triangle {
@@ -60,9 +67,9 @@
         }
         
         .star, .heart {
+            font-size: 100px;
+            line-height: 150px;
             background-color: transparent !important;
-            font-size: 100px; /* Tamanho maior para os emojis */
-            line-height: 150px; /* Centraliza verticalmente */
         }
         
         .question {
@@ -197,21 +204,26 @@
             // Seleciona uma cor e forma aleatórias
             currentColor = colors[Math.floor(Math.random() * colors.length)];
             currentShape = shapes[Math.floor(Math.random() * shapes.length)];
-
-            // Remove qualquer conteúdo anterior
-            shapeElement.innerHTML = "";
-            shapeElement.style.backgroundColor = "";
             
             // Configura a forma visual
             shapeElement.className = "shape";
             shapeElement.classList.add(currentShape);
+            shapeElement.innerHTML = "";
             
-            if (currentShape === "star" || currentShape === "heart") {
-                // Para estrela e coração, usamos emojis coloridos
+            // Remove qualquer estilo de cor anterior
+            shapeElement.style.backgroundColor = "";
+            shapeElement.style.color = "";
+            shapeElement.style.borderBottomColor = "";
+            
+            if (currentShape === "star") {
                 shapeElement.style.color = currentColor.hex;
-                shapeElement.textContent = currentShape === "star" ? "★" : "❤";
+                shapeElement.textContent = "★";
+            } else if (currentShape === "heart") {
+                shapeElement.style.color = currentColor.hex;
+                shapeElement.textContent = "❤";
+            } else if (currentShape === "triangle") {
+                shapeElement.style.borderBottomColor = currentColor.hex;
             } else {
-                // Para outras formas, usamos background-color
                 shapeElement.style.backgroundColor = currentColor.hex;
             }
             
