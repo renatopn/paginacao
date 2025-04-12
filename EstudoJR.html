@@ -20,14 +20,21 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #F0F0F0;
+            background-color: #F0f0f0;
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
+        .score {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #4dabf7;
+            font-weight: bold;
+        }
+        
         .shape-container {
-            margin: 30px 0;
+            margin: 20px 0;
             height: 200px;
             display: flex;
             justify-content: center;
@@ -150,6 +157,8 @@
     <div class="container">
         <h1>Aprenda Cores em Inglês!</h1>
         
+        <div class="score" id="score">Score: 0/0</div>
+        
         <div class="shape-container">
             <div class="shape" id="shape"></div>
         </div>
@@ -189,10 +198,18 @@
         const submitButton = document.getElementById("submit");
         const messageElement = document.getElementById("message");
         const feedbackElement = document.getElementById("feedback");
+        const scoreElement = document.getElementById("score");
         
         // Variáveis de estado
         let currentColor;
         let currentShape;
+        let correctAnswers = 0;
+        let totalAttempts = 0;
+        
+        // Atualiza a pontuação
+        function updateScore() {
+            scoreElement.textContent = `Score: ${correctAnswers}/${totalAttempts}`;
+        }
         
         // Inicializa o jogo
         function initGame() {
@@ -241,8 +258,12 @@
             
             if (userAnswer === "") return;
             
+            totalAttempts++;
+            
             if (userAnswer === currentColor.name) {
                 // Resposta correta
+                correctAnswers++;
+                updateScore();
                 messageElement.textContent = "Congratulations! 🎉";
                 messageElement.className = "message celebrate";
                 feedbackElement.textContent = "";
@@ -251,6 +272,7 @@
                 setTimeout(initGame, 2000);
             } else {
                 // Resposta incorreta
+                updateScore();
                 messageElement.textContent = "Oh no! 😢";
                 messageElement.className = "message";
                 
@@ -273,6 +295,7 @@
         });
         
         // Inicia o jogo
+        updateScore();
         initGame();
     </script>
 </body>
