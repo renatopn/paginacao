@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Aprenda Inglês</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f0f9ff;
+            font-size: 20px;
+        }
+
+        .screen {
+            display: none;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .config-item {
+            border: 2px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+        }
+
+        .config-item img {
+            max-width: 120px;
+            margin-right: 25px;
+            border-radius: 8px;
+        }
+
+        .game-image {
+            max-width: 400px;
+            max-height: 300px;
+            display: block;
+            margin: 20px auto;
+            border: 4px solid #4CAF50;
+            border-radius: 15px;
+        }
+
+        .message {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .correct {
+            background-color: #8BC34A;
+            color: white;
+        }
+
+        .wrong {
+            background-color: #FF5252;
+            color: white;
+        }
+
+        .blank {
+            background-color: #f0f9ff;
+            color: white;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 24px;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            background-color: #45a049;
+        }
+
+        input[type="text"] {
+            font-size: 24px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 3px solid #4CAF50;
+            border-radius: 15px;
+            width: 60%;
+        }
+
+        h1 {
+            color: #FF9800;
+            padding: 5px 50px;
+            font-size: 2.5rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: #2196F3;
+            font-size: 2rem;
+        }
+
+        #score {
+            font-size: 1.8rem;
+            color: #2196F3;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #question {
+            font-size: 1.8rem;
+            color: #2196F3;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .config-item button {
+            background-color: #ff4444;
+            padding: 8px 15px;
+            font-size: 18px;
+            margin-left: auto;
+        }
+
+        /* Adicione este novo estilo para o modal */
+        .json-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .json-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 25px;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+        }
+
+        #jsonEditor {
+            width: 100%;
+            height: 400px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            padding: 15px;
+            margin: 15px 0;
+            border: 3px solid #4CAF50;
+            border-radius: 10px;
+            white-space: pre;
+        }
+
+        .modal-buttons {
+            text-align: center;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Tela de Configuração -->
+    <div id="configScreen" class="screen active">
+        <h2>Configuração</h2>
+
+        <div>
+            <input type="text" id="imageUrl" placeholder="URL da imagem">
+            <div>
+                Pergunta:
+                <label><input type="radio" name="questionType" value="it" checked> What is it?</label>
+                <label><input type="radio" name="questionType" value="they"> What are they?</label>
+            </div>
+            <input type="text" id="answer" placeholder="Resposta">
+            <input type="text" id="quantity" placeholder="Quantidade">
+            <input type="text" id="color" placeholder="Cor">
+            <button onclick="addItem()">Incluir</button>
+        </div>
+
+        <div id="itemsList"></div>
+        <button onclick="startGame()">Iniciar Jogo</button>
+        <button onclick="openJsonEditor()" style="background-color: #2196F3">Editar JSON</button>
+    </div>
+
+    <!-- Tela do Jogo -->
+    <div id="gameScreen" class="screen">
+        <div style="display: flex;">
+            <button onclick="showConfig()" style="background-color: #f0f9ff">⚙️</button>
+            <h1>Learning English</h1>
+        </div>
+        <div id="score">Score: 0/0</div>
+        <img id="gameImage" class="game-image">
+        <div id="question"></div>
+        <input type="text" id="userAnswer">
+        <button onclick="checkAnswer()">Verificar</button>
+        <div id="message"></div>
+        <div id="messageCorrect"></div>
+        <div id="messageWrong"></div>
+    </div>
+
+    <!-- Modal para Salvar JSON -->
+    <div id="jsonModal" class="json-modal">
+        <div class="json-content">
+            <h2>Editar Itens (JSON)</h2>
+            <textarea id="jsonEditor"></textarea>
+            <div id="jsonError" class="error-message"></div>
+            <div class="modal-buttons">
+                <button onclick="saveJson()" style="background-color: #4CAF50">Salvar</button>
+                <button onclick="closeJsonModal()" style="background-color: #ff4444">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let items = [];
+        let currentItemIndex = 0;
+        let currentQuestion = 0;
+        let score = { correct: 0, total: 0 };
+        const positiveMessages = ['Great job!', 'Well done!', 'Excellent!', 'Perfect!'];
+        const negativeMessages = ['Try again!', 'Not quite...', 'Almost there!', 'Keep trying!'];
+
+        function addItem() {
+            const item = {
+                url: document.getElementById('imageUrl').value,
+                questionType: document.querySelector('input[name="questionType"]:checked').value,
+                answer: document.getElementById('answer').value.toLowerCase(),
+                quantity: document.getElementById('quantity').value.toLowerCase(),
+                color: document.getElementById('color').value.toLowerCase()
+            };
+
+            items.push(item);
+            updateItemsList();
+        }
+
+        function updateItemsList() {
+            const list = document.getElementById('itemsList');
+            list.innerHTML = items.map((item, index) => `
+                <div class="config-item">
+                    <img src="${item.url}">
+                    ${item.questionType === 'it' ? 'What is it?' : 'What are they?'}<br>
+                    Answer: ${item.answer}<br>
+                    Quantity: ${item.quantity}<br>
+                    Color: ${item.color}
+                    <button onclick="deleteItem(${index})">X</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteItem(index) {
+            items.splice(index, 1);
+            updateItemsList();
+        }
+
+        function startGame() {
+            currentItemIndex = 0;
+            currentQuestion = 0;
+            score = { correct: 0, total: 0 };
+            showScreen('gameScreen');
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = 'message blank';
+            messageDiv.textContent = '';
+            
+            if (currentItemIndex >= items.length) {
+                endGame();
+                return;
+            }
+
+            const item = items[currentItemIndex];
+            document.getElementById('gameImage').src = item.url;
+
+            let question;
+            switch (currentQuestion) {
+                case 0:
+                    question = item.questionType === 'it' ? 'What is it?' : 'What are they?';
+                    break;
+                case 1:
+                    question = `How many ${item.answer} ${item.questionType === 'it' ? 'is' : 'are'} there?`;
+                    break;
+                case 2:
+                    question = `What color ${item.questionType === 'it' ? 'is it?' : 'are they?'}`;
+                    break;
+            }
+
+            document.getElementById('question').textContent = question;
+            document.getElementById('userAnswer').value = '';
+        }
+
+        function checkAnswer() {
+            const item = items[currentItemIndex];
+            const userAnswer = document.getElementById('userAnswer').value.trim().toLowerCase();
+            let correctAnswer;
+            let isCorrect = false;
+
+            switch (currentQuestion) {
+                case 0:
+                    const answer = item.answer.toLowerCase().trim();
+                    const firstLetter = answer[0];
+                    let article = 'a';
+
+                    // Determinar o artigo correto
+                    if(answer === 'moon' || answer === 'sun' ){
+                        article = 'the';
+                    }else if (['a', 'e', 'i', 'o', 'u'].includes(firstLetter)) {
+                        article = 'an';
+                    }
+
+                    // Gerar variações aceitáveis
+                    const baseVariations = item.questionType === 'it'
+                        ? [
+                            `it's ${article} ${answer}`,
+                            `it is ${article} ${answer}`,
+                            `it's${article}${answer}`,
+                            `it is${article}${answer}`
+                        ]
+                        : [
+                            `they are ${answer}`,
+                            `they're ${answer}`,
+                            `they are${answer}`,
+                            `they're${answer}`
+                        ];
+
+                    // Verificar resposta
+                    const userResponse = userAnswer.replace(/ /g, '');
+                    isCorrect = baseVariations.some(v => v.replace(/ /g, '').toLowerCase() === userResponse);
+                    correctAnswer = "'"+baseVariations.slice(0, 2).join(`' or '`)+"'";
+                    break;
+
+                case 1:
+                    correctAnswer = item.quantity.toLowerCase();
+                    isCorrect = userAnswer === correctAnswer;
+                    break;
+
+                case 2:
+                    correctAnswer = item.color.toLowerCase();
+                    isCorrect = userAnswer === correctAnswer;
+                    break;
+            }
+
+            score.total++;
+            const messageDiv = document.getElementById('message');
+            const messageCDiv = document.getElementById('messageCorrect');
+            const messageWDiv = document.getElementById('messageWrong');
+            
+            if (isCorrect) {
+                score.correct++;
+                messageDiv.className = 'message correct';
+                messageDiv.textContent = positiveMessages[Math.floor(Math.random() * positiveMessages.length)];
+
+                messageCDiv.className = 'message blank';
+                messageWDiv.className = 'message blank';
+                messageCDiv.textContent = correctAnswer;
+                messageWDiv.textContent = userAnswer;
+
+            } else {
+                messageDiv.className = 'message wrong';
+                messageDiv.textContent = `${negativeMessages[Math.floor(Math.random() * negativeMessages.length)]}`;
+               
+                messageCDiv.className = 'message correct';
+                messageWDiv.className = 'message wrong';
+                messageCDiv.textContent = 'Correct...: '+correctAnswer;
+                messageWDiv.textContent = 'Incorrect.: '+userAnswer;
+            }
+
+            document.getElementById('score').textContent = `Score: ${score.correct}/${score.total}`;
+
+            currentQuestion++;
+            if (currentQuestion > 2) {
+                currentQuestion = 0;
+                currentItemIndex++;
+            }
+
+            setTimeout(nextQuestion, 2000);
+        }
+
+        function endGame() {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = 'message correct';
+            messageDiv.innerHTML = 'Parabéns! Você completou o jogo!<br>' +
+                '<button onclick="startGame();">Reiniciar</button>' +
+                '<button onclick="showConfig();">Configurações</button>';
+        }
+
+        function showConfig() {
+            showScreen('configScreen');
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function openJsonEditor() {
+            document.getElementById('jsonEditor').value = JSON.stringify(items, null, 2);
+            document.getElementById('jsonModal').style.display = 'block';
+            document.getElementById('jsonError').textContent = '';
+        }
+
+        function closeJsonModal() {
+            document.getElementById('jsonModal').style.display = 'none';
+        }
+
+        function saveJson() {
+            try {
+                const newItems = JSON.parse(document.getElementById('jsonEditor').value);
+
+                // Validação básica
+                if (!Array.isArray(newItems)) {
+                    throw new Error('O JSON deve ser um array de objetos');
+                }
+
+                newItems.forEach(item => {
+                    if (!item.url || !item.questionType || !item.answer || !item.quantity || !item.color) {
+                        throw new Error('Cada item deve conter todos os campos obrigatórios');
+                    }
+                });
+
+                items = newItems;
+                updateItemsList();
+                closeJsonModal();
+            } catch (error) {
+                document.getElementById('jsonError').textContent =
+                    `Erro no JSON: ${error.message}`;
+            }
+        }
+
+        // Modifique a função updateItemsList para incluir todos os campos
+        function updateItemsList() {
+            const list = document.getElementById('itemsList');
+            list.innerHTML = items.map((item, index) => `
+                <div class="config-item">
+                    <img src="${item.url}">
+                    <div>
+                        <strong>${item.questionType === 'it' ? 'What is it?' : 'What are they?'}</strong><br>
+                        Resposta: ${item.answer}<br>
+                        Quantidade: ${item.quantity}<br>
+                        Cor: ${item.color}
+                    </div>
+                    <button onclick="deleteItem(${index})">X</button>
+                </div>
+            `).join('');
+        }
+
+        // Adicione este código no final do script, após a definição do checkAnswer
+        document.getElementById('userAnswer').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+    </script>
+</body>
+
+</html>
