@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprenda Inglês - Ambiente Familiar</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', 'Marker Felt', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6ecbf5 0%, #c2e9fb 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .screen {
+            display: none;
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .active {
+            display: block;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            color: #ff6b6b;
+            font-size: 2.8rem;
+            text-shadow: 3px 3px 0 #ffe66d;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: #4ecdc4;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .config-form {
+            background: #f7f9fc;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 1.4rem;
+            color: #1a535c;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.3rem;
+            border: 3px solid #4ecdc4;
+            border-radius: 12px;
+            background-color: white;
+            margin-bottom: 10px;
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+            background: #e9f7f6;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+        }
+
+        .checkbox-option {
+            background: #ffefd6;
+        }
+
+        input[type="radio"], input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 10px;
+        }
+
+        .actor-action-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        button {
+            background: linear-gradient(to bottom, #ff9e7d 0%, #ff6b6b 100%);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(to bottom, #4ecdc4 0%, #1a535c 100%);
+            box-shadow: 0 5px 15px rgba(26, 83, 92, 0.4);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 20px rgba(26, 83, 92, 0.6);
+        }
+
+        .items-list {
+            margin-top: 30px;
+        }
+
+        .item-card {
+            background: white;
+            border: 4px solid #ffe66d;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .item-card img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background: #f0f0f0;
+            border: 2px dashed #4ecdc4;
+        }
+
+        .item-info {
+            font-size: 1.3rem;
+            color: #1a535c;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 0;
+        }
+
+        .game-area {
+            text-align: center;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .score {
+            font-size: 1.8rem;
+            background: #1a535c;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+
+        .game-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            margin: 20px auto;
+            border: 5px solid #ffe66d;
+        }
+
+        .question {
+            font-size: 2rem;
+            color: #1a535c;
+            margin: 25px 0;
+            font-weight: bold;
+            min-height: 60px;
+        }
+
+        .answer-input {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .message {
+            font-size: 1.6rem;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px auto;
+            max-width: 90%;
+        }
+
+        .correct {
+            background: #c7f9cc;
+            color: #1a535c;
+            border: 3px solid #57cc99;
+        }
+
+        .wrong {
+            background: #ffd6d6;
+            color: #e63946;
+            border: 3px solid #e63946;
+        }
+
+        .correct-answer {
+            font-size: 1.4rem;
+            margin-top: 15px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 20px;
+            padding: 30px;
+            max-height: 80vh;
+            overflow: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: #1a535c;
+        }
+
+        .close-modal {
+            background: #ff6b6b;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #jsonEditor {
+            width: 100%;
+            height: 300px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            padding: 15px;
+            border: 3px solid #4ecdc4;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .error-message {
+            color: #e63946;
+            font-size: 1.3rem;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .final-screen {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .final-message {
+            font-size: 2.5rem;
+            color: #1a535c;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .question {
+                font-size: 1.7rem;
+            }
+            
+            button {
+                font-size: 1.3rem;
+                padding: 15px 25px;
+            }
+            
+            .radio-option, .checkbox-option {
+                font-size: 1.1rem;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tela de Configuração -->
+        <div id="configScreen" class="screen active">
+            <header>
+                <h1>Aprenda Inglês</h1>
+                <h2>Configuração do Jogo</h2>
+            </header>
+            
+            <div class="config-form">
+                <div class="form-group">
+                    <label for="imageUrl">URL da Imagem:</label>
+                    <input type="text" id="imageUrl" placeholder="Cole a URL da imagem aqui">
+                </div>
+                
+                <div class="form-group">
+                    <label>Ambiente:</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="roomType" value="bathroom" checked> Bathroom
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="roomType" value="kitchen"> Kitchen
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="roomType" value="bedroom"> Bedroom
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="roomType" value="dining room"> Dining room
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="roomType" value="living room"> Living room
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Is there (Selecione os itens presentes):</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="bed"> Bed
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="lamp"> Lamp
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="mirror"> Mirror
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="sofa"> Sofa
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="book"> Book
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="tree"> Tree
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="TV"> TV
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="Clock"> Clock
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="picture"> Picture
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="chair"> Chair
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="table"> Table
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="spoon"> Spoon
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="knife"> Knife
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="items" value="fork"> Fork
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Ator e Ação:</label>
+                    <div id="actorsContainer">
+                        <div class="actor-action-group">
+                            <select class="actor-select">
+                                <option value="">Selecione um ator</option>
+                                <option value="he">He</option>
+                                <option value="she">She</option>
+                                <option value="they">They</option>
+                                <option value="the boy">The boy</option>
+                                <option value="the girl">The girl</option>
+                                <option value="the father">The father</option>
+                                <option value="the mother">The mother</option>
+                                <option value="the son">The son</option>
+                                <option value="the daughter">The daughter</option>
+                            </select>
+                            <select class="action-select">
+                                <option value="">Selecione uma ação</option>
+                                <option value="cleaning">Cleaning</option>
+                                <option value="cooking">Cooking</option>
+                                <option value="eating">Eating</option>
+                                <option value="sleeping">Sleeping</option>
+                                <option value="taking a bath">Taking a bath</option>
+                                <option value="watching TV">Watching TV</option>
+                                <option value="playing">Playing</option>
+                                <option value="reading">Reading</option>
+                                <option value="writing">Writing</option>
+                            </select>
+                            <button onclick="addActorAction()" style="padding: 10px; font-size: 1.2rem;">+</button>
+                        </div>
+                    </div>
+                    <div id="actorActionsList"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button onclick="addItem()">Incluir</button>
+                    <button onclick="openJsonEditor()" class="btn-secondary">Editar Configurações</button>
+                </div>
+            </div>
+            
+            <div id="itemsList" class="items-list"></div>
+            
+            <div class="buttons">
+                <button onclick="startGame()">Iniciar Jogo</button>
+            </div>
+        </div>
+        
+        <!-- Tela do Jogo -->
+        <div id="gameScreen" class="screen">
+            <div class="game-header">
+                <button onclick="showConfig()">⚙️ Configurações</button>
+                <div class="score" id="score">Score: 0/0</div>
+            </div>
+            
+            <header>
+                <h1>Learning English</h1>
+            </header>
+            
+            <div class="game-area">
+                <img id="gameImage" class="game-image" alt="Imagem do jogo">
+                
+                <div class="question" id="question"></div>
+                
+                <div class="answer-input">
+                    <input type="text" id="userAnswer" placeholder="Digite sua resposta aqui..." 
+                           onkeypress="handleEnter(event)">
+                </div>
+                
+                <button onclick="checkAnswer()" style="margin-top: 20px;">Verificar</button>
+                
+                <div id="message" class="message"></div>
+            </div>
+        </div>
+        
+        <!-- Tela Final -->
+        <div id="finalScreen" class="screen final-screen">
+            <h1>Parabéns!</h1>
+            <div class="final-message">
+                Você completou o jogo!<br>
+                Seu score final: <span id="finalScore"></span>
+            </div>
+            
+            <div class="buttons">
+                <button onclick="startGame()">Reiniciar o Jogo</button>
+                <button onclick="showConfig()" class="btn-secondary">Configurações</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal JSON Editor -->
+    <div id="jsonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Editar Configurações (JSON)</div>
+                <div class="close-modal" onclick="closeJsonModal()">×</div>
+            </div>
+            
+            <textarea id="jsonEditor"></textarea>
+            
+            <div id="jsonError" class="error-message"></div>
+            
+            <div class="modal-buttons">
+                <button onclick="saveJson()">Salvar</button>
+                <button onclick="closeJsonModal()" class="btn-secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados do jogo
+        let items = [];
+        let currentItemIndex = 0;
+        let currentQuestionType = 0;
+        let score = { correct: 0, total: 0 };
+        let currentItemQuestions = [];
+        let currentQuestionIndex = 0;
+        let usedItems = [];
+        
+        // Mensagens de feedback
+        const positiveMessages = [
+            'Excelente! 🎉', 
+            'Muito bem! 👏', 
+            'Você é incrível! 🌟', 
+            'Perfeito! 💯',
+            'Resposta correta! 👍'
+        ];
+        
+        const negativeMessages = [
+            'Quase lá! Tente novamente. 😊', 
+            'Ainda não, continue tentando! 💪', 
+            'Não é essa, mas você vai conseguir! ✨',
+            'Oops! Tente de novo. 😉'
+        ];
+        
+        // Funções de configuração
+        function addActorAction() {
+            const container = document.getElementById('actorsContainer');
+            const newGroup = document.createElement('div');
+            newGroup.className = 'actor-action-group';
+            newGroup.innerHTML = `
+                <select class="actor-select">
+                    <option value="">Selecione um ator</option>
+                    <option value="he">He</option>
+                    <option value="she">She</option>
+                    <option value="they">They</option>
+                    <option value="the boy">The boy</option>
+                    <option value="the girl">The girl</option>
+                    <option value="the father">The father</option>
+                    <option value="the mother">The mother</option>
+                    <option value="the son">The son</option>
+                    <option value="the daughter">The daughter</option>
+                </select>
+                <select class="action-select">
+                    <option value="">Selecione uma ação</option>
+                    <option value="cleaning">Cleaning</option>
+                    <option value="cooking">Cooking</option>
+                    <option value="eating">Eating</option>
+                    <option value="sleeping">Sleeping</option>
+                    <option value="taking a bath">Taking a bath</option>
+                    <option value="watching TV">Watching TV</option>
+                    <option value="playing">Playing</option>
+                    <option value="reading">Reading</option>
+                    <option value="writing">Writing</option>
+                </select>
+                <button onclick="this.parentElement.remove()" style="background: #ff6b6b; padding: 10px; font-size: 1.2rem;">-</button>
+            `;
+            container.appendChild(newGroup);
+        }
+        
+        function addItem() {
+            const imageUrl = document.getElementById('imageUrl').value;
+            if (!imageUrl) {
+                alert('Por favor, insira uma URL de imagem válida.');
+                return;
+            }
+            
+            // Obter ambiente selecionado
+            const roomType = document.querySelector('input[name="roomType"]:checked').value;
+            
+            // Obter itens selecionados
+            const selectedItems = [];
+            document.querySelectorAll('input[name="items"]:checked').forEach(item => {
+                selectedItems.push(item.value);
+            });
+            
+            // Obter atores e ações
+            const actorActions = [];
+            document.querySelectorAll('.actor-action-group').forEach(group => {
+                const actor = group.querySelector('.actor-select').value;
+                const action = group.querySelector('.action-select').value;
+                if (actor && action) {
+                    actorActions.push({ actor, action });
+                }
+            });
+            
+            const newItem = {
+                url: imageUrl,
+                roomType,
+                items: selectedItems,
+                actorActions
+            };
+            
+            items.push(newItem);
+            updateItemsList();
+            
+            // Resetar o formulário
+            document.getElementById('imageUrl').value = '';
+            document.querySelectorAll('input[name="items"]').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.actor-action-group').forEach((group, index) => {
+                if (index > 0) group.remove();
+            });
+            document.querySelector('.actor-select').value = '';
+            document.querySelector('.action-select').value = '';
+            document.getElementById('actorActionsList').innerHTML = '';
+        }
+        
+        function updateItemsList() {
+            const list = document.getElementById('itemsList');
+            if (items.length === 0) {
+                list.innerHTML = '<div class="item-card"><p>Nenhum item adicionado ainda.</p></div>';
+                return;
+            }
+            
+            list.innerHTML = items.map((item, index) => `
+                <div class="item-card">
+                    <img src="${item.url}" alt="Imagem configurada">
+                    <div class="item-info">
+                        <p><strong>Ambiente:</strong> ${item.roomType}</p>
+                        <p><strong>Itens:</strong> ${item.items.join(', ') || 'Nenhum item selecionado'}</p>
+                        <p><strong>Atores e Ações:</strong> ${
+                            item.actorActions.length > 0 
+                                ? item.actorActions.map(aa => `${aa.actor} is ${aa.action}`).join(', ') 
+                                : 'Nenhum ator/ação configurado'
+                        }</p>
+                    </div>
+                    <button class="delete-btn" onclick="deleteItem(${index})">X</button>
+                </div>
+            `).join('');
+        }
+        
+        function deleteItem(index) {
+            items.splice(index, 1);
+            updateItemsList();
+        }
+        
+        function startGame() {
+            if (items.length === 0) {
+                alert('Adicione pelo menos um item antes de iniciar o jogo.');
+                return;
+            }
+            
+            // Embaralhar os itens para ordem aleatória
+            shuffleArray(items);
+            
+            currentItemIndex = 0;
+            score = { correct: 0, total: 0 };
+            document.getElementById('score').textContent = `Score: ${score.correct}/${score.total}`;
+            document.getElementById('message').textContent = '';
+            
+            showScreen('gameScreen');
+            startItemQuestions();
+        }
+        
+        function startItemQuestions() {
+            if (currentItemIndex >= items.length) {
+                endGame();
+                return;
+            }
+            
+            const item = items[currentItemIndex];
+            document.getElementById('gameImage').src = item.url;
+            
+            // Resetar perguntas para este item
+            currentItemQuestions = [];
+            currentQuestionIndex = 0;
+            usedItems = [];
+            
+            // Adicionar perguntas para este item
+            // 1. Pergunta sobre o ambiente
+            currentItemQuestions.push({
+                type: 'room',
+                question: 'What room is this?',
+                correctAnswer: `this is a ${item.roomType}`
+            });
+            
+            // 2. Perguntas sobre os itens (até 4 perguntas)
+            const availableItems = [...item.items];
+            
+            // Garantir pelo menos uma pergunta sobre um item presente
+            if (availableItems.length > 0) {
+                const presentItem = availableItems[Math.floor(Math.random() * availableItems.length)];
+                currentItemQuestions.push(createItemQuestion(presentItem, true));
+                usedItems.push(presentItem);
+            }
+            
+            // Adicionar mais perguntas sobre itens (presentes ou ausentes)
+            const allItems = ['bed', 'lamp', 'mirror', 'sofa', 'book', 'tree', 'TV', 'Clock', 'picture', 'chair', 'table', 'spoon', 'knife', 'fork'];
+            let remainingQuestions = 3; // Já adicionamos uma
+            
+            while (remainingQuestions > 0 && (availableItems.length > 0 || allItems.length > 0)) {
+                // Escolher se pergunta sobre item presente ou ausente (60% presente, 40% ausente)
+                const isPresent = Math.random() < 0.6;
+                let item;
+                
+                if (isPresent && availableItems.length > 0) {
+                    // Escolher um item presente que ainda não foi usado
+                    const unusedItems = availableItems.filter(i => !usedItems.includes(i));
+                    if (unusedItems.length > 0) {
+                        item = unusedItems[Math.floor(Math.random() * unusedItems.length)];
+                        usedItems.push(item);
+                    } else {
+                        item = availableItems[Math.floor(Math.random() * availableItems.length)];
+                    }
+                } else {
+                    // Escolher um item ausente que ainda não foi usado
+                    const absentItems = allItems.filter(i => !(item && item.items.includes(i)) && !(usedItems && usedItems.includes(i)));
+                    if (absentItems.length > 0) {
+                        item = absentItems[Math.floor(Math.random() * absentItems.length)];
+                        usedItems.push(item);
+                    }
+                }
+                
+                if (item) {
+                    currentItemQuestions.push(createItemQuestion(item, isPresent));
+                    remainingQuestions--;
+                } else {
+                    break; // Não há mais itens disponíveis
+                }
+            }
+            
+            // 3. Perguntas sobre atores e ações
+            item.actorActions.forEach(aa => {
+                currentItemQuestions.push({
+                    type: 'actorAction',
+                    question: aa.actor === 'they' 
+                        ? `What are ${aa.actor} doing?` 
+                        : `What is ${aa.actor} doing?`,
+                    correctAnswer: aa.actor === 'they' 
+                        ? `${aa.actor} are ${aa.action}`
+                        : `${aa.actor} is ${aa.action}`
+                });
+            });
+            
+            // Mostrar a primeira pergunta deste item
+            showCurrentQuestion();
+        }
+        
+        function createItemQuestion(item, isPresent) {
+            return {
+                type: 'item',
+                question: `Is there a ${item}?`,
+                correctAnswer: isPresent ? 'yes, there is' : 'no, there isn\'t',
+                item: item,
+                isPresent: isPresent
+            };
+        }
+        
+        function showCurrentQuestion() {
+            if (currentQuestionIndex >= currentItemQuestions.length) {
+                // Todas as perguntas deste item foram respondidas
+                currentItemIndex++;
+                setTimeout(startItemQuestions, 1500);
+                return;
+            }
+            
+            const question = currentItemQuestions[currentQuestionIndex];
+            document.getElementById('question').textContent = question.question;
+            document.getElementById('userAnswer').value = '';
+            document.getElementById('message').textContent = '';
+            document.getElementById('userAnswer').focus();
+        }
+        
+        function normalizeString(str) {
+            // Remove pontuações e converte para minúsculas
+            return str.toLowerCase()
+                .replace(/[.,?!;:'"()]/g, '')  // Remove pontuações comuns
+                .replace(/\s+/g, ' ')          // Substitui múltiplos espaços por um único
+                .trim();                       // Remove espaços no início e fim
+        }
+
+        function checkAnswer() {
+            const question = currentItemQuestions[currentQuestionIndex];
+            const userAnswer = normalizeString(document.getElementById('userAnswer').value);
+            const correctAnswer = normalizeString(question.correctAnswer);
+            
+            let isCorrect = false;
+            let displayCorrectAnswer = question.correctAnswer; // Mantém a formatação original para exibição
+
+            // Verificação flexível para respostas
+            if (question.type === 'room') {
+                // Para perguntas sobre ambiente, verifica se a resposta contém as palavras-chave
+                const keywords = correctAnswer.split(' ').filter(word => word.length > 2);
+                isCorrect = keywords.every(keyword => userAnswer.includes(keyword));
+            } else {
+                // Para outras perguntas, compara a string normalizada
+                isCorrect = userAnswer === correctAnswer;
+            }
+
+            // Atualizar pontuação
+            score.total++;
+            const messageDiv = document.getElementById('message');
+            
+            if (isCorrect) {
+                score.correct++;
+                messageDiv.className = 'message correct';
+                messageDiv.textContent = positiveMessages[Math.floor(Math.random() * positiveMessages.length)];
+            } else {
+                messageDiv.className = 'message wrong';
+                messageDiv.innerHTML = `
+                    ${negativeMessages[Math.floor(Math.random() * negativeMessages.length)]}
+                    <div class="correct-answer">Resposta correta: <strong>${displayCorrectAnswer}</strong></div>
+                `;
+            }
+
+            document.getElementById('score').textContent = `Score: ${score.correct}/${score.total}`;
+            
+            // Avançar para a próxima pergunta
+            currentQuestionIndex++;
+            setTimeout(showCurrentQuestion, 2000);
+        }
+        
+        function endGame() {
+            document.getElementById('finalScore').textContent = `${score.correct}/${score.total}`;
+            showScreen('finalScreen');
+        }
+        
+        // Funções auxiliares
+        function showConfig() {
+            showScreen('configScreen');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+        
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        
+        function handleEnter(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+        
+        // Funções do editor JSON
+        function openJsonEditor() {
+            document.getElementById('jsonEditor').value = JSON.stringify(items, null, 2);
+            document.getElementById('jsonModal').style.display = 'flex';
+            document.getElementById('jsonError').textContent = '';
+        }
+        
+        function closeJsonModal() {
+            document.getElementById('jsonModal').style.display = 'none';
+        }
+        
+        function saveJson(strJson) {
+            try {
+                const newItems = strJson ? JSON.parse(strJson) : JSON.parse(document.getElementById('jsonEditor').value);
+                
+                // Validação básica
+                if (!Array.isArray(newItems)) {
+                    throw new Error('O JSON deve ser um array de objetos');
+                }
+                
+                newItems.forEach(item => {
+                    if (!item.url || !item.roomType || !Array.isArray(item.items) || !Array.isArray(item.actorActions)) {
+                        throw new Error('Cada item deve conter todos os campos obrigatórios');
+                    }
+                });
+                
+                items = newItems;
+                updateItemsList();
+                closeJsonModal();
+            } catch (error) {
+                document.getElementById('jsonError').textContent = 
+                    `Erro no JSON: ${error.message}`;
+            }
+        }
+        
+        var initialListStr =  null;
+        fetch('./JogoInglesAmbientesConfig.json')
+            .then(response => {
+                if (!response.ok) {
+                   return null;
+                }
+                return response.json();
+            })
+            .then(data => {
+                saveJson(data);
+                // Use the data here
+            })
+            .catch(error => {
+                return null;
+            });
+
+        // Inicialização
+        updateItemsList();
+    </script>
+</body>
+</html>

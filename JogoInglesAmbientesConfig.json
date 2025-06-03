@@ -1,0 +1,259 @@
+[
+  {
+    "url": "https://img.freepik.com/free-vector/woman-clean-house-kitchen-vector-illustration-housewife-wash-home-dining-cooking-room-with-dirty-mold-interior-cute-happy-mother-wife-character-indoor-housework-cartoon-background_107791-22645.jpg?semt=ais_hybrid&w=740",
+    "roomType": "kitchen",
+    "items": [
+      "chair",
+      "table"
+    ],
+    "actorActions": [
+      {
+        "actor": "she",
+        "action": "cleaning"
+      }
+    ]
+  },
+  {
+    "url": "https://static.vecteezy.com/ti/vetor-gratis/p1/294742-um-menino-dormindo-no-quarto-gratis-vetor.jpg",
+    "roomType": "bedroom",
+    "items": [
+      "bed",
+      "Clock"
+    ],
+    "actorActions": [
+      {
+        "actor": "the boy",
+        "action": "sleeping"
+      }
+    ]
+  },
+  {
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRv5wo_XCkjzWGu82G43MNXneMvvR7vNo86Xg&s",
+    "roomType": "bathroom",
+    "items": [
+      "mirror"
+    ],
+    "actorActions": [
+      {
+        "actor": "she",
+        "action": "taking a bath"
+      }
+    ]
+  },
+  {
+    "url": "https://img.freepik.com/free-vector/many-children-playing-bedroom_1308-73043.jpg",
+    "roomType": "bathroom",
+    "items": [
+      "bed",
+      "lamp",
+      "tree",
+      "Clock",
+      "picture",
+      "table"
+    ],
+    "actorActions": [
+      {
+        "actor": "they",
+        "action": "playing"
+      }
+    ]
+  },
+  {
+    "url": "https://www.wkoerich.com.br/wp-content/uploads/2020/04/capa-1-899x600.jpg",
+    "roomType": "kitchen",
+    "items": [
+      "lamp",
+      "knife"
+    ],
+    "actorActions": [
+      {
+        "actor": "they",
+        "action": "cooking"
+      }
+    ]
+  },
+  {
+    "url": "https://static.vecteezy.com/ti/fotos-gratis/t1/7289799-garotinha-menina-lendo-livro-com-lupa-no-sofa-criancas-felizes-brincando-com-lupa-na-sala-de-estar-foto.jpg",
+    "roomType": "living room",
+    "items": [
+      "sofa",
+      "book"
+    ],
+    "actorActions": [
+      {
+        "actor": "the girl",
+        "action": "reading"
+      }
+    ]
+  },
+  {
+    "url": "https://static.vecteezy.com/system/resources/thumbnails/020/088/540/small_2x/cute-family-are-eating-at-the-dinner-table-they-are-having-breakfast-cartoon-vector.jpg",
+    "roomType": "dining room",
+    "items": [
+      "chair",
+      "table",
+      "spoon",
+      "knife",
+      "fork"
+    ],
+    "actorActions": [
+      {
+        "actor": "they",
+        "action": "eating"
+      }
+    ]
+  },
+  {
+    "url": "https://www.shutterstock.com/image-photo/indian-man-reading-book-wife-260nw-1833201955.jpg",
+    "roomType": "living room",
+    "items": [
+      "lamp",
+      "sofa",
+      "tree",
+      "table"
+    ],
+    "actorActions": [
+      {
+        "actor": "the girl",
+        "action": "watching TV"
+      },
+      {
+        "actor": "the boy",
+        "action": "reading"
+      }
+    ]
+  },
+  {
+    "url": "https://thumbs.dreamstime.com/b/little-boy-cleaning-bathroom-floor-illustration-94424978.jpg",
+    "roomType": "bathroom",
+    "items": [
+      "mirror"
+    ],
+    "actorActions": [
+      {
+        "actor": "he",
+        "action": "cleaning"
+      }
+    ]
+  },
+  {
+    "url": "https://static01.nyt.com/images/2015/08/23/t-magazine/23womens-well-writers-slide-1E0D/23womens-well-writers-slide-1E0D-superJumbo.jpg",
+    "roomType": "living room",
+    "items": [
+      "mirror",
+      "sofa",
+      "chair",
+      "table"
+    ],
+    "actorActions": [
+      {
+        "actor": "he",
+        "action": "writing"
+      }
+    ]
+  },
+  {
+    "url": "https://thumbs.dreamstime.com/b/cheerful-family-enjoys-quality-time-playing-board-game-cozy-living-room-filled-laughter-warmth-creating-memorable-352499903.jpg",
+    "roomType": "dining room",
+    "items": [
+      "lamp",
+      "sofa",
+      "tree",
+      "picture",
+      "chair",
+      "table"
+    ],
+    "actorActions": [
+      {
+        "actor": "they",
+        "action": "playing"
+      }
+    ]
+  },
+  {
+    "url": "https://www.thestreet.com/.image/ar_16:9%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cg_xy_center%2Cq_auto:good%2Cw_640%2Cx_789%2Cy_502/MTkyMjEzNjQyODY1ODEzMDM4/carnival-cruise-eating-lead-js-090922.jpg",
+    "roomType": "bedroom",
+    "items": [
+      "bed",
+      "lamp",
+      "TV",
+      "picture"
+    ],
+    "actorActions": [
+      {
+        "actor": "they",
+        "action": "eating"
+      }
+    ]
+  },
+  {
+    "url": "https://png.pngtree.com/png-clipart/20230807/original/pngtree-a-boy-writing-on-his-bed-bedroom-room-boy-vector-png-image_9475150.png",
+    "roomType": "bedroom",
+    "items": [
+      "bed",
+      "lamp",
+      "book",
+      "Clock"
+    ],
+    "actorActions": [
+      {
+        "actor": "he",
+        "action": "writing"
+      }
+    ]
+  },
+  {
+    "url": "https://media.istockphoto.com/id/1153669330/photo/multi-tasking-mother-holds-sleeping-baby-son-and-cleans-in-kitchen.jpg?s=612x612&w=0&k=20&c=XPhmiOV6R6pD5pDc0j3c8ca4YSc184MLe4r_NpybAOo=",
+    "roomType": "kitchen",
+    "items": [
+      "lamp"
+    ],
+    "actorActions": [
+      {
+        "actor": "the mother",
+        "action": "cleaning"
+      },
+      {
+        "actor": "the son",
+        "action": "sleeping"
+      }
+    ]
+  },
+  {
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTXhi052X3ExGoLWKYA5WG-VtQLrIOXWWIaw&s",
+    "roomType": "living room",
+    "items": [
+      "sofa",
+      "book"
+    ],
+    "actorActions": [
+      {
+        "actor": "he",
+        "action": "reading"
+      },
+      {
+        "actor": "she",
+        "action": "sleeping"
+      }
+    ]
+  },
+  {
+    "url": "https://as1.ftcdn.net/jpg/02/19/32/26/1000_F_219322621_suBPrv6PMoMj5gf954rfQztPPY5pC4xv.jpg",
+    "roomType": "living room",
+    "items": [
+      "sofa",
+      "TV",
+      "table"
+    ],
+    "actorActions": [
+      {
+        "actor": "she",
+        "action": "cleaning"
+      },
+      {
+        "actor": "he",
+        "action": "watching TV"
+      }
+    ]
+  }
+]
