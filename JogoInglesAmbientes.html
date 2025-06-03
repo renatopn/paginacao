@@ -959,7 +959,7 @@
                 if (!response.ok) {
                    return null;
                 }
-                return saveJson(response.json());
+                return response.json();
             })
             .then(data => {
                 saveJson(data);
