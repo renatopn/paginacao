@@ -929,9 +929,9 @@
             document.getElementById('jsonModal').style.display = 'none';
         }
         
-        function saveJson(strJson) {
+        function saveJson(jsonList) {
             try {
-                const newItems = strJson ? JSON.parse(strJson) : JSON.parse(document.getElementById('jsonEditor').value);
+                const newItems = jsonList ? jsonList : JSON.parse(document.getElementById('jsonEditor').value);
                 
                 // Validação básica
                 if (!Array.isArray(newItems)) {
