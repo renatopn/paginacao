@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparação de Cotações</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e6f7ff;
+        }
+        .best-price {
+            background-color: #d4edda;
+            font-weight: bold;
+        }
+        .missing-price {
+            color: #999;
+            font-style: italic;
+        }
+        .supplier-header {
+            background-color: #343a40;
+            color: white;
+        }
+        .product-category {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Comparação de Cotações</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Sto</th>
+                <th>Estrela</th>
+                <th>Rio Vermelho</th>
+                <th>Martins</th>
+                <th>Atacadao</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Bebidas Alcoólicas -->
+            <tr class="product-category">
+                <td colspan="6">BEBIDAS ALCOÓLICAS</td>
+            </tr>
+            <tr>
+                <td>Vodka 51 ice limão 275 ml - 24 unidades</td>
+                <td class="best-price">4,84</td>
+                <td class="missing-price">-</td>
+                <td>4,85</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vodka 51 ice Tangerina 275 ml - 24 unidades</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Cachaça Seleta 1l - 4 unidades</td>
+                <td>44,42</td>
+                <td>54,73</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Espumante Casa Perini Moscatel 750 ml - 1 unidade</td>
+                <td>44,50</td>
+                <td class="missing-price">-</td>
+                <td>42,78</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Conhaque Domecq 1 L - 1 unidade</td>
+                <td>35,41</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Extra Power 2l - 12 unidades</td>
+                <td>12,05</td>
+                <td class="best-price">10,71</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>9.80</td>
+            </tr>
+            <tr>
+                <td>Gin tanqueray 275 ml - 4 unidades</td>
+                <td>14,35</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Aguardente Pedra 90 500ml - 2 cx</td>
+                <td>4,00</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Rum Bacardi Big Apple 980 ml - 1 unidade</td>
+                <td>32,11</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Wysky passaport 250 ml - 1 cx</td>
+                <td>48,45</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Wysky black stone 250 ml - 24 unidades</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho composto Paratudo 900 ml - 2 unidades</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>12,50 (cx 12)</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho Casillero Del Diabo Cabernet Sauvignon 750 ml - 2 unidades</td>
+                <td>39,10</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho Casillero Del Diabo Carmenere 750 ml - 2 unidades</td>
+                <td>39,10</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho Casillero Del Diabo Merlot 750 ml - 2 unidades</td>
+                <td>39,10</td>
+                <td>41,35</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho Casillero Del Diabo Pinot Noir 750 ml - 4 unidades</td>
+                <td>39,10</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho Cella Tinto 750 ml - 3 unidades</td>
+                <td>40,40</td>
+                <td class="missing-price">-</td>
+                <td>45,61</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho Concha y Toro Cabernet Sauvingnon 750 ml - 3 unidades</td>
+                <td>21,92</td>
+                <td class="missing-price">-</td>
+                <td>24,55</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho Mioranza branco suave 750 ml - 3 unidades</td>
+                <td>13,30</td>
+                <td>14,70</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho Mioranza tinto Suave 750 ml - 2 unidades</td>
+                <td>13,35</td>
+                <td>14,70</td>
+                <td>12,75</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho Naturelle Rose 750 ml - 2 unidades</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>44,85</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho Naturelle Tinto 750 ml - 2 unidades</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>44,85</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vinho Pergola Tinto Suave 1 l - 2 unidades</td>
+                <td class="missing-price">-</td>
+                <td>22,15</td>
+                <td>21,66</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Vodka Smirnoff 600 ml - 1 cx</td>
+                <td>21,66</td>
+                <td class="missing-price">-</td>
+                <td>22,62</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            
+            <!-- Mantimentos -->
+            <tr class="product-category">
+                <td colspan="6">MANTIMENTOS</td>
+            </tr>
+            <tr>
+                <td>Açúcar 2 KG Perola - 1 fardo</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Água Sanitária Qboa 1 l - 1 cx</td>
+                <td class="missing-price">-</td>
+                <td>3,41</td>
+                <td>3,70</td>
+                <td class="missing-price">-</td>
+                <td class="best-price">3.59</td>
+            </tr>
+            <tr>
+                <td>Café Santa Clara/Sítio 500g - 1 fardo</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>35.89</td>
+            </tr>
+            <tr>
+                <td>Leite Condensado Itambé lata 395 g - 12 unidades</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>7,70 (cx 24)</td>
+                <td class="missing-price">-</td>
+                <td class="best-price">6.80</td>
+            </tr>
+            <tr>
+                <td>Leite condensado Moça lata 395 g - 12 unidades</td>
+                <td class="missing-price">-</td>
+                <td>11,34</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>7.99</td>
+            </tr>
+            <tr>
+                <td>Papel Alumínio Weda 30 cm - 1 fd</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>2,52 (30x4m)</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Flocao Yoki 500g - 01 fd</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            
+            <!-- Higiene e Limpeza -->
+            <tr class="product-category">
+                <td colspan="6">HIGIENE E LIMPEZA</td>
+            </tr>
+            <tr>
+                <td>Absorvente Intimus gel com abas 8 und - 8 unidades</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>4,30</td>
+                <td class="best-price">4,15</td>
+                <td>3.20</td>
+            </tr>
+            <tr>
+                <td>Isqueiro Bic pequeno - 1 cx</td>
+                <td class="missing-price">-</td>
+                <td>3,14</td>
+                <td>3,10</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Desinfetante 2l ou 5l</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>16,99 (kalipto)</td>
+                <td>5.89 (2l)</td>
+            </tr>
+            <tr>
+                <td>Papel higiênico para uso</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>11,07 (deluxe 12x20m)</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Sacola bio reforcada</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            
+            <!-- Eletrônicos -->
+            <tr class="product-category">
+                <td colspan="6">ELETRÔNICOS</td>
+            </tr>
+            <tr>
+                <td>Pilhas Panasonic AAA2 c/2 - 12 cartelas</td>
+                <td class="missing-price">-</td>
+                <td>7,43</td>
+                <td class="missing-price">-</td>
+                <td>6,91</td>
+                <td class="missing-price">-</td>
+            </tr>
+            
+            <!-- Chocolates e Doces -->
+            <tr class="product-category">
+                <td colspan="6">CHOCOLATES E DOCES</td>
+            </tr>
+            <tr>
+                <td>Amandita 200g - 3 unidades</td>
+                <td class="missing-price">-</td>
+                <td>14,24</td>
+                <td class="missing-price">-</td>
+                <td>13,91</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Bis ao leite 126g - 10 unidade</td>
+                <td>5,09</td>
+                <td>4,74</td>
+                <td>4,99</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Chocolate Lolo 28g - 1 Dp</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Look chocolate 55g - 1 cx</td>
+                <td>2,17</td>
+                <td>2,71</td>
+                <td>2,30</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Chocolate Prestigio 33g - 2 dp</td>
+                <td>2,55</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>2,68</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Chocolate Suflair 50 g - 1 Dp</td>
+                <td>4,80</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>4,52</td>
+                <td class="missing-price">-</td>
+            </tr>
+            
+            <!-- Barras de Chocolate -->
+            <tr>
+                <td>Lacta ao leite 90g - 1</td>
+                <td>6,31</td>
+                <td>6,87</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Lacta diamante negro 90 g - 1</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>6,63</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Lacta diamante negro e laka 90 g - 1</td>
+                <td>6,31</td>
+                <td>6,80</td>
+                <td class="missing-price">-</td>
+                <td>6,63</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Lacta laka 90g - 1</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>6,59</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Nestlé alpino 90 g - 1</td>
+                <td>7,16</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>7,23</td>
+                <td>6.99</td>
+            </tr>
+            <tr>
+                <td>Nestlé alpino black 90g - 1</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>6,96</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Nestlé alpino white 90 g - 1</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Nestlé ao leite 90g - 1</td>
+                <td>7,16</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>7,21</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Nestlé duo 90 g - 1</td>
+                <td>7,16</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>7,21</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Talento Dark 90g - 1 dp</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>1,78</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Talento Zero 90g - 1 dp</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Trento Chocolate ao leite - 1 dp</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>1,78</td>
+                <td class="missing-price">-</td>
+            </tr>
+            
+            <!-- Bebidas Não Alcoólicas -->
+            <tr class="product-category">
+                <td colspan="6">BEBIDAS NÃO ALCOÓLICAS</td>
+            </tr>
+            <tr>
+                <td>Água indaia de 5 litros - 10 unidades</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Guara mix Copo -1 cx</td>
+                <td class="missing-price">-</td>
+                <td>1,45</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td>1.49</td>
+            </tr>
+            <tr>
+                <td>Guara mix Sport 500 ml - 1 cx</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+            <tr>
+                <td>Guara mix Bocao 500ml - 1 cx</td>
+                <td class="missing-price">-</td>
+                <td>2,99</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+                <td class="missing-price">-</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
