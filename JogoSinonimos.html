@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maratona dos Significados e Sinônimos</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+        
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .settings-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .settings-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .game-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+        
+        .word-display {
+            font-size: 48px;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .easy {
+            background-color: #2ecc71;
+        }
+        
+        .medium {
+            background-color: #f39c12;
+        }
+        
+        .hard {
+            background-color: #e74c3c;
+        }
+        
+        .meaning {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #34495e;
+        }
+        
+        .answer-input {
+            width: 80%;
+            padding: 15px;
+            font-size: 20px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .check-btn {
+            background-color: #9b59b6;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+        
+        .check-btn:hover {
+            background-color: #8e44ad;
+            transform: scale(1.05);
+        }
+        
+        .message {
+            font-size: 22px;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .success {
+            background-color: #d5f5e3;
+            color: #27ae60;
+        }
+        
+        .error {
+            background-color: #fadbd8;
+            color: #e74c3c;
+        }
+        
+        .correct-answer {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .json-textarea {
+            width: 100%;
+            height: 300px;
+            font-family: monospace;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+        }
+        
+        .save-btn {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .game-over {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .final-score {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .final-message {
+            font-size: 24px;
+            color: #7f8c8d;
+        }
+        
+        @media (max-width: 600px) {
+            .word-display {
+                font-size: 36px;
+            }
+            
+            .meaning {
+                font-size: 20px;
+            }
+            
+            .answer-input {
+                width: 90%;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="settings-btn">⚙️ Configurações</button>
+        <div class="score">Pontuação: 0/0</div>
+    </div>
+    
+    <div class="game-container">
+        <div id="word-display" class="word-display easy">Carregando...</div>
+        <div id="meaning" class="meaning">Aguarde enquanto preparamos o jogo</div>
+        <input type="text" id="answer-input" class="answer-input" placeholder="Digite o sinônimo..." disabled>
+        <button id="check-btn" class="check-btn" disabled>Verificar</button>
+        <div id="message" class="message"></div>
+    </div>
+    
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">Configurações do Jogo</div>
+            <textarea id="json-textarea" class="json-textarea"></textarea>
+            <div class="modal-buttons">
+                <button id="cancel-btn" class="modal-btn cancel-btn">Cancelar</button>
+                <button id="save-btn" class="modal-btn save-btn">Salvar</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Dados iniciais do jogo
+        let gameData = [
+            {"nivel": "Fácil", "palavra": "Bola", "significado": "Objeto redondo para brincar", "sinonimo": "Esfera"},
+            {"nivel": "Fácil", "palavra": "Gato", "significado": "Animal pequeno e peludo", "sinonimo": "Felino"},
+            {"nivel": "Fácil", "palavra": "Céu", "significado": "Onde estão as nuvens e o sol", "sinonimo": "Firmamento"},
+            {"nivel": "Fácil", "palavra": "Escola", "significado": "Lugar onde a gente aprende", "sinonimo": "Colégio"},
+            {"nivel": "Fácil", "palavra": "Mão", "significado": "Parte do corpo para pegar as coisas", "sinonimo": "Palma"},
+            {"nivel": "Fácil", "palavra": "Pé", "significado": "Parte do corpo para andar", "sinonimo": "Pata"},
+            {"nivel": "Médio", "palavra": "Esperto", "significado": "Entende rápido", "sinonimo": "Inteligente"},
+            {"nivel": "Médio", "palavra": "Triste", "significado": "Quando não estamos felizes", "sinonimo": "Chateado"},
+            {"nivel": "Médio", "palavra": "Devagar", "significado": "Acontece com calma", "sinonimo": "Lento"},
+            {"nivel": "Médio", "palavra": "Medo", "significado": "Sentir receio ou susto", "sinonimo": "Receio"},
+            {"nivel": "Médio", "palavra": "Forte", "significado": "Com muita força", "sinonimo": "Resistente"},
+            {"nivel": "Médio", "palavra": "Limpo", "significado": "Sem sujeira", "sinonimo": "Higienizado"},
+            {"nivel": "Médio", "palavra": "Rápido", "significado": "Que vai depressa", "sinonimo": "Veloz"},
+            {"nivel": "Médio", "palavra": "Barulho", "significado": "Som alto ou incômodo", "sinonimo": "Ruído"},
+            {"nivel": "Médio", "palavra": "Leve", "significado": "Que não pesa muito", "sinonimo": "Suave"},
+            {"nivel": "Médio", "palavra": "Bravo", "significado": "Que fica com raiva", "sinonimo": "Irritado"},
+            {"nivel": "Médio", "palavra": "Sombra", "significado": "Parte escura feita pela luz", "sinonimo": "Escuridão"},
+            {"nivel": "Médio", "palavra": "Caminho", "significado": "Lugar por onde passamos", "sinonimo": "Trilha"},
+            {"nivel": "Médio", "palavra": "Desenho", "significado": "Imagem feita com lápis", "sinonimo": "Ilustração"},
+            {"nivel": "Médio", "palavra": "Quente", "significado": "Com muito calor", "sinonimo": "Tórrido"},
+            {"nivel": "Médio", "palavra": "Parar", "significado": "Deixar de se mover", "sinonimo": "Cessar"},
+            {"nivel": "Médio", "palavra": "Roupa", "significado": "O que vestimos", "sinonimo": "Vestimenta"},
+            {"nivel": "Médio", "palavra": "Folha", "significado": "Parte da planta ou do caderno", "sinonimo": "Página"},
+            {"nivel": "Médio", "palavra": "Luz", "significado": "Clareia os lugares", "sinonimo": "Iluminação"},
+            {"nivel": "Médio", "palavra": "Ficar", "significado": "Permanecer no lugar", "sinonimo": "Permanecer"},
+            {"nivel": "Médio", "palavra": "Machucar", "significado": "Fazer doer", "sinonimo": "Ferir"},
+            {"nivel": "Fácil", "palavra": "Feliz", "significado": "Estar alegre", "sinonimo": "Contente"},
+            {"nivel": "Fácil", "palavra": "Bonito", "significado": "Que é agradável de ver", "sinonimo": "Lindo"},
+            {"nivel": "Fácil", "palavra": "Correr", "significado": "Andar rápido", "sinonimo": "Disparar"},
+            {"nivel": "Fácil", "palavra": "Casa", "significado": "Lugar onde a gente mora", "sinonimo": "Lar"},
+            {"nivel": "Fácil", "palavra": "Grande", "significado": "De tamanho maior", "sinonimo": "Enorme"},
+            {"nivel": "Fácil", "palavra": "Comer", "significado": "Colocar comida na boca", "sinonimo": "Alimentar-se"},
+            {"nivel": "Fácil", "palavra": "Ajuda", "significado": "Fazer algo por alguém", "sinonimo": "Apoio"},
+            {"nivel": "Fácil", "palavra": "Brincar", "significado": "Se divertir com jogos", "sinonimo": "Jogar"},
+            {"nivel": "Fácil", "palavra": "Doce", "significado": "Alimento com gosto de açúcar", "sinonimo": "Guloseima"},
+            {"nivel": "Fácil", "palavra": "Sol", "significado": "Bola de luz no céu que esquenta", "sinonimo": "Astro"},
+            {"nivel": "Fácil", "palavra": "Frio", "significado": "Quando a temperatura está baixa", "sinonimo": "Gelado"},
+            {"nivel": "Fácil", "palavra": "Sorrir", "significado": "Fazer cara feliz com a boca", "sinonimo": "Rir"},
+            {"nivel": "Fácil", "palavra": "Olhar", "significado": "Usar os olhos para ver", "sinonimo": "Ver"},
+            {"nivel": "Fácil", "palavra": "Limpar", "significado": "Tirar a sujeira", "sinonimo": "Higienizar"},
+            {"nivel": "Fácil", "palavra": "Amigo", "significado": "Pessoa com quem gostamos de estar", "sinonimo": "Companheiro"},
+            {"nivel": "Fácil", "palavra": "Dormir", "significado": "Descansar os olhos e o corpo", "sinonimo": "Cochilar"},
+            {"nivel": "Fácil", "palavra": "Pular", "significado": "Sair do chão com os pés", "sinonimo": "Saltar"},
+            {"nivel": "Fácil", "palavra": "Falar", "significado": "Usar a voz para se comunicar", "sinonimo": "Conversar"},
+            {"nivel": "Fácil", "palavra": "Rir", "significado": "Mostrar alegria com som", "sinonimo": "Gargalhar"},
+            {"nivel": "Fácil", "palavra": "Andar", "significado": "Caminhar com os pés", "sinonimo": "Caminhar"},
+            {"nivel": "Fácil", "palavra": "Livro", "significado": "Objeto com histórias ou informações", "sinonimo": "Obra"},
+            {"nivel": "Difícil", "palavra": "Importante", "significado": "Que tem muito valor ou sentido", "sinonimo": "Essencial"},
+            {"nivel": "Difícil", "palavra": "Imaginar", "significado": "Criar coisas na cabeça", "sinonimo": "Fantasiar"},
+            {"nivel": "Difícil", "palavra": "Ajudante", "significado": "Quem colabora com alguém", "sinonimo": "Assistente"},
+            {"nivel": "Difícil", "palavra": "Perigoso", "significado": "Que pode fazer mal", "sinonimo": "Arriscado"},
+            {"nivel": "Difícil", "palavra": "Observar", "significado": "Prestar muita atenção", "sinonimo": "Vigiar"},
+            {"nivel": "Difícil", "palavra": "Descobrir", "significado": "Achar algo novo", "sinonimo": "Encontrar"},
+            {"nivel": "Difícil", "palavra": "Reclamando", "significado": "Dizendo que algo está ruim", "sinonimo": "Queixando-se"},
+            {"nivel": "Difícil", "palavra": "Vontade", "significado": "Desejo de fazer algo", "sinonimo": "Desejo"},
+            {"nivel": "Difícil", "palavra": "Apagar", "significado": "Tirar a luz ou a marca", "sinonimo": "Eliminar"},
+            {"nivel": "Difícil", "palavra": "Inimigo", "significado": "Quem não é amigo", "sinonimo": "Rival"},
+            {"nivel": "Difícil", "palavra": "Procurar", "significado": "Tentar achar algo", "sinonimo": "Buscar"},
+            {"nivel": "Médio", "palavra": "Janela", "significado": "Abertura na parede para ver fora", "sinonimo": "Vidraça"},
+            {"nivel": "Médio", "palavra": "Animal", "significado": "Ser vivo que se move e sente", "sinonimo": "Bicho"},
+            {"nivel": "Médio", "palavra": "Boneca", "significado": "Brinquedo que parece gente", "sinonimo": "Fantoche"},
+            {"nivel": "Médio", "palavra": "Escutar", "significado": "Prestar atenção ao som", "sinonimo": "Ouvir"},
+            {"nivel": "Médio", "palavra": "Lápis", "significado": "Objeto para escrever", "sinonimo": "Grafite"},
+            {"nivel": "Médio", "palavra": "Nuvem", "significado": "Vapor de água no céu", "sinonimo": "Neblina"},
+            {"nivel": "Médio", "palavra": "Beijo", "significado": "Ato de carinho com a boca", "sinonimo": "Ósculo"},
+            {"nivel": "Difícil", "palavra": "Corajoso", "significado": "Quem enfrenta o medo", "sinonimo": "Valente"},
+            {"nivel": "Difícil", "palavra": "Inteligente", "significado": "Aprende rápido", "sinonimo": "Esperto"},
+            {"nivel": "Difícil", "palavra": "Misterioso", "significado": "Que ninguém entende direito", "sinonimo": "Enigmático"},
+            {"nivel": "Difícil", "palavra": "Preocupado", "significado": "Pensando em algo que pode dar errado", "sinonimo": "Ansioso"},
+            {"nivel": "Difícil", "palavra": "Bagunça", "significado": "Tudo fora do lugar", "sinonimo": "Desordem"},
+            {"nivel": "Difícil", "palavra": "Confiante", "significado": "Acredita em si mesmo", "sinonimo": "Seguro"},
+            {"nivel": "Difícil", "palavra": "Injusto", "significado": "Algo que não é certo", "sinonimo": "Desleal"},
+            {"nivel": "Difícil", "palavra": "Esconder", "significado": "Guardar para ninguém ver", "sinonimo": "Ocultar"},
+            {"nivel": "Difícil", "palavra": "Educado", "significado": "Fala com respeito", "sinonimo": "Gentil"},
+            {"nivel": "Difícil", "palavra": "Tranquilo", "significado": "Calmo e sem agito", "sinonimo": "Sereno"},
+            {"nivel": "Difícil", "palavra": "Desobediente", "significado": "Quem não obedece regras", "sinonimo": "Rebelde"},
+            {"nivel": "Difícil", "palavra": "Descansar", "significado": "Ficar quieto para recuperar forças", "sinonimo": "Relaxar"},
+            {"nivel": "Difícil", "palavra": "Surpresa", "significado": "Algo inesperado", "sinonimo": "Espanto"},
+            {"nivel": "Difícil", "palavra": "Orgulhoso", "significado": "Que sente alegria por algo bom", "sinonimo": "Satisfeito"},
+            {"nivel": "Difícil", "palavra": "Trabalhar", "significado": "Fazer tarefas ou deveres", "sinonimo": "Labutar"},
+            {"nivel": "Difícil", "palavra": "Vagaroso", "significado": "Que anda bem devagar", "sinonimo": "Lento"}
+        ];
+
+        // Variáveis do jogo
+        let currentWord = null;
+        let usedWords = [];
+        let score = 0;
+        let totalQuestions = 0;
+        let gameActive = false;
+        
+        // Elementos do DOM
+        const wordDisplay = document.getElementById('word-display');
+        const meaningDisplay = document.getElementById('meaning');
+        const answerInput = document.getElementById('answer-input');
+        const checkBtn = document.getElementById('check-btn');
+        const messageDisplay = document.getElementById('message');
+        const scoreDisplay = document.querySelector('.score');
+        const settingsBtn = document.querySelector('.settings-btn');
+        const settingsModal = document.getElementById('settings-modal');
+        const jsonTextarea = document.getElementById('json-textarea');
+        const saveBtn = document.getElementById('save-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        
+        // Frases de feedback
+        const successPhrases = [
+            "Parabéns! Você acertou!",
+            "Muito bem! Você é um expert em sinônimos!",
+            "Correto! Você está indo muito bem!",
+            "Ótimo trabalho! Continue assim!",
+            "Isso aí! Você é muito inteligente!"
+        ];
+        
+        const errorPhrases = [
+            "Ops! Não foi dessa vez, mas continue tentando!",
+            "Quase lá! Pratique mais um pouco!",
+            "Não desanime! Você vai conseguir na próxima!",
+            "Errou, mas isso faz parte do aprendizado!",
+            "Tente novamente! Você consegue!"
+        ];
+        
+        const finalMessages = [
+            {min: 0, max: 30, message: "Você pode melhorar! Pratique mais!"},
+            {min: 31, max: 70, message: "Bom trabalho! Continue praticando!"},
+            {min: 71, max: 90, message: "Excelente! Você está quase dominando todos os sinônimos!"},
+            {min: 91, max: 100, message: "Incrível! Você é um mestre dos sinônimos!"}
+        ];
+        
+        // Inicializar o jogo
+        function initGame() {
+            usedWords = [];
+            score = 0;
+            totalQuestions = 0;
+            gameActive = true;
+            updateScore();
+            nextWord();
+            
+            // Habilitar elementos
+            answerInput.disabled = false;
+            checkBtn.disabled = false;
+            
+            // Limpar mensagens
+            messageDisplay.style.display = 'none';
+            messageDisplay.className = 'message';
+        }
+        
+        // Selecionar próxima palavra
+        function nextWord() {
+            // Verificar se ainda há palavras disponíveis
+            const availableWords = gameData.filter(word => !usedWords.includes(word.palavra));
+            
+            if (availableWords.length === 0) {
+                endGame();
+                return;
+            }
+            
+            // Selecionar palavra aleatória
+            const randomIndex = Math.floor(Math.random() * availableWords.length);
+            currentWord = availableWords[randomIndex];
+            
+            // Adicionar à lista de palavras usadas
+            usedWords.push(currentWord.palavra);
+            
+            // Atualizar exibição
+            wordDisplay.textContent = currentWord.palavra;
+            meaningDisplay.textContent = currentWord.significado;
+            
+            // Definir cor baseada no nível
+            wordDisplay.className = 'word-display';
+            if (currentWord.nivel === 'Fácil') {
+                wordDisplay.classList.add('easy');
+            } else if (currentWord.nivel === 'Médio') {
+                wordDisplay.classList.add('medium');
+            } else {
+                wordDisplay.classList.add('hard');
+            }
+            
+            // Limpar campo de resposta
+            answerInput.value = '';
+            answerInput.focus();
+        }
+        
+        // Verificar resposta
+        function checkAnswer() {
+            if (!currentWord || !gameActive) return;
+            
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            const correctAnswer = currentWord.sinonimo.toLowerCase();
+            
+            totalQuestions++;
+            
+            // Verificar se a resposta está correta
+            if (userAnswer === correctAnswer) {
+                // Resposta correta
+                score++;
+                showFeedback(true);
+            } else {
+                // Resposta incorreta
+                showFeedback(false, correctAnswer);
+            }
+            
+            updateScore();
+        }
+        
+        // Mostrar feedback
+        function showFeedback(isCorrect, correctAnswer = null) {
+            messageDisplay.style.display = 'block';
+            
+            if (isCorrect) {
+                // Feedback positivo
+                const randomPhrase = successPhrases[Math.floor(Math.random() * successPhrases.length)];
+                messageDisplay.textContent = randomPhrase;
+                messageDisplay.className = 'message success';
+                
+                // Próxima palavra após breve pausa
+                setTimeout(() => {
+                    messageDisplay.style.display = 'none';
+                    nextWord();
+                }, 1500);
+            } else {
+                // Feedback negativo
+                const randomPhrase = errorPhrases[Math.floor(Math.random() * errorPhrases.length)];
+                messageDisplay.innerHTML = `${randomPhrase}<div class="correct-answer">Resposta correta: ${correctAnswer}</div>`;
+                messageDisplay.className = 'message error';
+                
+                // Próxima palavra após 3 segundos
+                setTimeout(() => {
+                    messageDisplay.style.display = 'none';
+                    nextWord();
+                }, 3000);
+            }
+        }
+        
+        // Atualizar pontuação
+        function updateScore() {
+            scoreDisplay.textContent = `Pontuação: ${score}/${totalQuestions}`;
+        }
+        
+        // Finalizar jogo
+        function endGame() {
+            gameActive = false;
+            answerInput.disabled = true;
+            checkBtn.disabled = true;
+            
+            // Calcular porcentagem de acertos
+            const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
+            
+            // Selecionar mensagem final
+            let finalMessage = "";
+            for (const msg of finalMessages) {
+                if (percentage >= msg.min && percentage <= msg.max) {
+                    finalMessage = msg.message;
+                    break;
+                }
+            }
+            
+            // Exibir tela de fim de jogo
+            wordDisplay.textContent = "Fim do Jogo!";
+            wordDisplay.className = 'word-display easy';
+            meaningDisplay.innerHTML = `
+                <div class="game-over">Jogo Concluído!</div>
+                <div class="final-score">Sua pontuação: ${score}/${totalQuestions} (${percentage}%)</div>
+                <div class="final-message">${finalMessage}</div>
+            `;
+            
+            // Limpar campo de resposta e mensagens
+            answerInput.value = '';
+            messageDisplay.style.display = 'none';
+        }
+        
+        // Configurações - Abrir modal
+        function openSettings() {
+            jsonTextarea.value = JSON.stringify(gameData, null, 2);
+            settingsModal.style.display = 'flex';
+        }
+        
+        // Configurações - Fechar modal
+        function closeSettings() {
+            settingsModal.style.display = 'none';
+        }
+        
+        // Configurações - Salvar
+        function saveSettings() {
+            try {
+                const newData = JSON.parse(jsonTextarea.value);
+                
+                // Validar dados
+                if (!Array.isArray(newData)) {
+                    throw new Error("Os dados devem ser um array");
+                }
+                
+                for (const item of newData) {
+                    if (!item.nivel || !item.palavra || !item.significado || !item.sinonimo) {
+                        throw new Error("Cada item deve ter 'nivel', 'palavra', 'significado' e 'sinonimo'");
+                    }
+                }
+                
+                // Salvar novos dados e reiniciar jogo
+                gameData = newData;
+                closeSettings();
+                initGame();
+            } catch (error) {
+                alert(`Erro ao salvar configurações: ${error.message}`);
+            }
+        }
+        
+        // Event Listeners
+        checkBtn.addEventListener('click', checkAnswer);
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+        
+        settingsBtn.addEventListener('click', openSettings);
+        saveBtn.addEventListener('click', saveSettings);
+        cancelBtn.addEventListener('click', closeSettings);
+        
+        // Iniciar o jogo quando a página carregar
+        window.addEventListener('load', initGame);
+    </script>
+</body>
+</html>
