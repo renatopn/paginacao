@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medidor de Dimensões em Imagens</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #2c3e50, #4a6491);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .menu-bar {
+            display: flex;
+            justify-content: center;
+            background-color: #34495e;
+            padding: 10px;
+            gap: 15px;
+        }
+        
+        .menu-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background-color: #ecf0f1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .menu-control:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .menu-control label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .menu-control select, .menu-control button {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .color-btn {
+            background: linear-gradient(to right, #ff6b6b, #ff8e53);
+            color: white;
+            font-weight: 600;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .color-btn:hover {
+            background: linear-gradient(to right, #ff5252, #ff7e40);
+            transform: scale(1.05);
+        }
+        
+        .image-area {
+            width: 800px;
+            height: 600px;
+            margin: 20px auto;
+            background-color: #f8f9fa;
+            border: 3px dashed #bdc3c7;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .image-area.active {
+            border-color: #3498db;
+            background-color: #e3f2fd;
+        }
+        
+        .image-area:hover {
+            border-color: #3498db;
+        }
+        
+        .placeholder {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 24px;
+            font-weight: 500;
+            padding: 20px;
+            max-width: 500px;
+            position: absolute;
+            z-index: 1;
+        }
+        
+        .tip {
+            font-size: 16px;
+            margin-top: 15px;
+            color: #95a5a6;
+        }
+        
+        .canvas-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+        }
+        
+        .canvas-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        #image-canvas {
+            z-index: 1;
+        }
+        
+        #draw-canvas {
+            z-index: 2;
+            cursor: crosshair;
+        }
+        
+        .dimensions-list {
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-top: 2px solid #bdc3c7;
+            position: relative;
+        }
+        
+        .dimensions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .dimensions-header h2 {
+            color: #2c3e50;
+        }
+        
+        .json-edit-btn {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .json-edit-btn:hover {
+            background: linear-gradient(to right, #2980b9, #2573a7);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .list-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            background-color: #3498db;
+            color: white;
+            padding: 12px 15px;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+        
+        .dimension-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            padding: 12px 15px;
+            border-bottom: 1px solid #bdc3c7;
+            transition: background-color 0.2s;
+        }
+        
+        .dimension-item:nth-child(even) {
+            background-color: #f1f8ff;
+        }
+        
+        .dimension-item:hover {
+            background-color: #e1f5fe;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 22px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .json-textarea {
+            width: 100%;
+            height: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            resize: none;
+            flex: 1;
+        }
+        
+        .json-textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .modal-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            flex: 1;
+        }
+        
+        .save-btn {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: white;
+        }
+        
+        .save-btn:hover {
+            background: linear-gradient(to right, #27ae60, #219653);
+        }
+        
+        .cancel-btn {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+        }
+        
+        .cancel-btn:hover {
+            background: linear-gradient(to right, #c0392b, #a93226);
+        }
+        
+        .color-modal .modal-content {
+            width: 280px;
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-option.selected {
+            border-color: white;
+            box-shadow: 0 0 0 3px #3498db;
+        }
+        
+        .instructions {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+            font-size: 14px;
+        }
+        
+        .instructions h3 {
+            color: #ff9800;
+            margin-bottom: 8px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        .json-error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Medidor de Dimensões em Imagens</h1>
+            <p>Cole uma imagem e comece a medir distâncias</p>
+        </header>
+        
+        <div class="menu-bar">
+            <div class="menu-control">
+                <label for="line-color">Cor:</label>
+                <button id="color-btn" class="color-btn">Alterar</button>
+            </div>
+            
+            <div class="menu-control">
+                <label for="line-width">Espessura:</label>
+                <select id="line-width">
+                    <option value="1">Fina</option>
+                    <option value="3" selected>Média</option>
+                    <option value="5">Grossa</option>
+                </select>
+            </div>
+            
+            <div class="menu-control">
+                <label for="measure-unit">Unidade:</label>
+                <select id="measure-unit">
+                    <option value="mm">mm</option>
+                    <option value="cm">cm</option>
+                    <option value="m">m</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>Como usar:</h3>
+            <ul>
+                <li>Cole uma imagem na área abaixo usando Ctrl+V ou o menu de contexto</li>
+                <li>Clique em dois pontos da imagem para criar uma linha de medição</li>
+                <li>A primeira linha será usada para calibrar as medidas reais</li>
+                <li>Linhas subsequentes serão calculadas automaticamente</li>
+                <li>Use os controles acima para personalizar a medição</li>
+            </ul>
+        </div>
+        
+        <div class="image-area" id="image-area">
+            <div class="placeholder">
+                <p>Cole sua imagem aqui</p>
+                <div class="tip">(Use Ctrl+V ou clique com o botão direito para colar)</div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="image-canvas" class="canvas-layer" width="800" height="600"></canvas>
+                <canvas id="draw-canvas" class="canvas-layer" width="800" height="600"></canvas>
+            </div>
+        </div>
+        
+        <div class="dimensions-list">
+            <div class="dimensions-header">
+                <h2>Lista de Dimensões</h2>
+                <button id="json-edit-btn" class="json-edit-btn">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M5 13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2zm1 0a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-6a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v6zm1 0a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v4zm1 0a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v8z"/>
+                    </svg>
+                    Editar JSON
+                </button>
+            </div>
+            <div class="list-header">
+                <div>Linha</div>
+                <div>Origem</div>
+                <div>Fim</div>
+                <div>Dimensão</div>
+                <div>Remover</div>
+            </div>
+            <div id="dimensions-container"></div>
+        </div>
+    </div>
+    
+    <!-- Modal para definição da primeira linha -->
+    <div class="modal" id="dimension-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Definir Dimensão Real</h2>
+            <div class="form-group">
+                <label for="real-length">Comprimento Real:</label>
+                <input type="number" id="real-length" step="0.01" min="0.01" placeholder="Ex: 10.5">
+            </div>
+            <div class="form-group">
+                <label for="real-unit">Unidade de Medida:</label>
+                <select id="real-unit">
+                    <option value="mm">Milímetros (mm)</option>
+                    <option value="cm">Centímetros (cm)</option>
+                    <option value="m">Metros (m)</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" id="cancel-btn">Cancelar</button>
+                <button class="modal-btn save-btn" id="save-btn">Salvar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para seleção de cor -->
+    <div class="modal color-modal" id="color-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Selecione a Cor da Linha</h2>
+            <div class="color-palette">
+                <div class="color-option selected" style="background-color: #FF3B30;" data-color="#FF3B30"></div>
+                <div class="color-option" style="background-color: #4CD964;" data-color="#4CD964"></div>
+                <div class="color-option" style="background-color: #007AFF;" data-color="#007AFF"></div>
+                <div class="color-option" style="background-color: #5856D6;" data-color="#5856D6"></div>
+                <div class="color-option" style="background-color: #FF9500;" data-color="#FF9500"></div>
+                <div class="color-option" style="background-color: #FF2D55;" data-color="#FF2D55"></div>
+                <div class="color-option" style="background-color: #5AC8FA;" data-color="#5AC8FA"></div>
+                <div class="color-option" style="background-color: #000000;" data-color="#000000"></div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" id="color-cancel">Cancelar</button>
+                <button class="modal-btn save-btn" id="color-save">Selecionar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para edição do JSON -->
+    <div class="modal" id="json-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Editar Dimensões em JSON</h2>
+            <div class="form-group">
+                <label for="json-textarea">Modifique as dimensões abaixo:</label>
+                <textarea id="json-textarea" class="json-textarea"></textarea>
+                <div id="json-error" class="json-error">Erro: Formato JSON inválido. Por favor, verifique a estrutura.</div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" id="json-cancel">Cancelar</button>
+                <button class="modal-btn save-btn" id="json-save">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Elementos DOM
+        const imageArea = document.getElementById('image-area');
+        const imageCanvas = document.getElementById('image-canvas');
+        const drawCanvas = document.getElementById('draw-canvas');
+        const imageCtx = imageCanvas.getContext('2d');
+        const drawCtx = drawCanvas.getContext('2d');
+        const dimensionsContainer = document.getElementById('dimensions-container');
+        const colorBtn = document.getElementById('color-btn');
+        const lineWidthSelect = document.getElementById('line-width');
+        const measureUnitSelect = document.getElementById('measure-unit');
+        const dimensionModal = document.getElementById('dimension-modal');
+        const colorModal = document.getElementById('color-modal');
+        const jsonModal = document.getElementById('json-modal');
+        const realLengthInput = document.getElementById('real-length');
+        const realUnitSelect = document.getElementById('real-unit');
+        const saveBtn = document.getElementById('save-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const colorSaveBtn = document.getElementById('color-save');
+        const colorCancelBtn = document.getElementById('color-cancel');
+        const jsonEditBtn = document.getElementById('json-edit-btn');
+        const jsonTextarea = document.getElementById('json-textarea');
+        const jsonSaveBtn = document.getElementById('json-save');
+        const jsonCancelBtn = document.getElementById('json-cancel');
+        const jsonError = document.getElementById('json-error');
+        
+        // Estado da aplicação
+        let state = {
+            image: null,
+            isMeasuring: false,
+            conversionIndex: null,
+            lineColor: '#FF3B30',
+            lineWidth: 3,
+            measureUnit: 'mm',
+            startPoint: null,
+            tempPoint: null,
+            dimensions: [],
+            isFirstLine: true
+        };
+        
+        // Inicialização
+        function init() {
+            imageCanvas.style.display = 'none';
+            drawCanvas.style.display = 'none';
+            
+            // Event Listeners
+            document.addEventListener('paste', handleImagePaste);
+            drawCanvas.addEventListener('mousedown', startMeasurement);
+            drawCanvas.addEventListener('mousemove', drawTempLine);
+            drawCanvas.addEventListener('mouseup', finishMeasurement);
+            colorBtn.addEventListener('click', openColorModal);
+            lineWidthSelect.addEventListener('change', updateLineWidth);
+            measureUnitSelect.addEventListener('change', updateMeasureUnit);
+            saveBtn.addEventListener('click', saveDimension);
+            cancelBtn.addEventListener('click', cancelMeasurement);
+            colorSaveBtn.addEventListener('click', saveColor);
+            colorCancelBtn.addEventListener('click', closeColorModal);
+            jsonEditBtn.addEventListener('click', openJsonModal);
+            jsonSaveBtn.addEventListener('click', saveJson);
+            jsonCancelBtn.addEventListener('click', closeJsonModal);
+            
+             document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' || event.keyCode === 27) {
+                // Ação a ser executada quando a tecla Esc for pressionada
+                cancelMeasurement();
+            }
+            });
+
+            // Configurar seletores de cor
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.color-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                });
+            });
+        }
+        
+        // Manipulação de colagem de imagem
+        function handleImagePaste(e) {
+            const items = e.clipboardData.items;
+            
+            for (const item of items) {
+                if (item.type.indexOf('image') !== -1) {
+                    const blob = item.getAsFile();
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        const img = new Image();
+                        img.onload = function() {
+                            state.image = img;
+                            imageCanvas.style.display = 'block';
+                            drawCanvas.style.display = 'block';
+                            imageArea.classList.add('active');
+                            drawImage();
+                        };
+                        img.src = event.target.result;
+                    };
+                    
+                    reader.readAsDataURL(blob);
+                    e.preventDefault();
+                    break;
+                }
+            }
+        }
+        
+        // Desenha a imagem no canvas
+        function drawImage() {
+            if (!state.image) return;
+            
+            // Limpa o canvas
+            imageCtx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+            
+            // Calcula dimensões para manter proporção
+            const maxWidth = imageCanvas.width;
+            const maxHeight = imageCanvas.height;
+            let width = state.image.width;
+            let height = state.image.height;
+            
+            if (width > maxWidth) {
+                const ratio = maxWidth / width;
+                width = maxWidth;
+                height = height * ratio;
+            }
+            
+            if (height > maxHeight) {
+                const ratio = maxHeight / height;
+                height = maxHeight;
+                width = width * ratio;
+            }
+            
+            // Centraliza a imagem
+            const x = (imageCanvas.width - width) / 2;
+            const y = (imageCanvas.height - height) / 2;
+            
+            // Desenha a imagem
+            imageCtx.drawImage(state.image, x, y, width, height);
+            
+            // Redesenha todas as dimensões
+            redrawDimensions();
+        }
+        
+        // Inicia a medição
+        function startMeasurement(e) {
+            if (!state.image) return;
+            
+            const rect = drawCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            if (!state.isMeasuring) {
+                // Primeiro clique
+                state.isMeasuring = true;
+                state.startPoint = { x, y };
+            } else {
+                // Segundo clique
+                state.tempPoint = { x, y };
+                if (state.isFirstLine) {
+                    dimensionModal.classList.add('active');
+                } else {
+                    finishMeasurement();
+                }
+            }
+        }
+        
+        // Desenha linha temporária durante o movimento do mouse
+        function drawTempLine(e) {
+            if (!state.isMeasuring || !state.startPoint) return;
+            
+            const rect = drawCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            state.tempPoint = { x, y };
+            
+            // Limpa o canvas de desenho
+            drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+            
+            // Desenha a linha temporária
+            drawCtx.beginPath();
+            drawCtx.moveTo(state.startPoint.x, state.startPoint.y);
+            drawCtx.lineTo(state.tempPoint.x, state.tempPoint.y);
+            drawCtx.strokeStyle = state.lineColor;
+            drawCtx.lineWidth = state.lineWidth;
+            drawCtx.stroke();
+            
+            // Calcula e exibe a distância e o ângulo
+            const distance = calculateDistance(state.startPoint, state.tempPoint);
+            const angle = calculateAngle(state.startPoint, state.tempPoint);
+            
+            const midX = (state.startPoint.x + state.tempPoint.x) / 2;
+            const midY = (state.startPoint.y + state.tempPoint.y) / 2;
+            
+            drawCtx.fillStyle = state.lineColor;
+            drawCtx.font = 'bold 14px Arial';
+            drawCtx.fillText(`${distance.toFixed(1)}px | ${angle.toFixed(1)}°`, midX, midY - 10);
+        }
+        
+        // Finaliza a medição
+        function finishMeasurement() {
+            if (!state.startPoint || !state.tempPoint) return;
+            
+            const distance = calculateDistance(state.startPoint, state.tempPoint);
+            let realDistance = distance;
+            
+            if (!state.isFirstLine && state.conversionIndex) {
+                realDistance = distance / state.conversionIndex;
+            }
+            
+            // Adiciona a dimensão à lista
+            state.dimensions.push({
+                start: { ...state.startPoint },
+                end: { ...state.tempPoint },
+                pixelDistance: distance,
+                realDistance: realDistance
+            });
+            
+            // Atualiza a interface
+            updateDimensionsList();
+            
+            // Reseta para próxima medição
+            state.isMeasuring = false;
+            state.startPoint = null;
+            state.tempPoint = null;
+            
+            // Limpa o canvas temporário
+            drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+            redrawDimensions();
+        }
+        
+        // Salva a dimensão da primeira linha
+        function saveDimension() {
+            const realLength = parseFloat(realLengthInput.value);
+            
+            if (!realLength || realLength <= 0) {
+                alert('Por favor, insira um valor válido para o comprimento real.');
+                return;
+            }
+            
+            const distance = calculateDistance(state.startPoint, state.tempPoint);
+            const selectedUnit = realUnitSelect.value;
+            
+            // Calcula o índice de conversão (pixels por unidade)
+            state.conversionIndex = distance / realLength;
+            
+            // Define a unidade de medida
+            state.measureUnit = selectedUnit;
+            measureUnitSelect.value = selectedUnit;
+            
+            // Marca que a primeira linha foi definida
+            state.isFirstLine = false;
+            
+            // Fecha o modal
+            dimensionModal.classList.remove('active');
+            
+            // Finaliza a medição
+            finishMeasurement();
+        }
+        
+        // Cancela a medição atual
+        function cancelMeasurement() {
+            state.isMeasuring = false;
+            state.startPoint = null;
+            state.tempPoint = null;
+            dimensionModal.classList.remove('active');
+            drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+        }
+
+        // Função para remover uma dimensão pelo índice
+        function removeDimension(index) {
+            if (index >= 0 && index < state.dimensions.length) {
+                // Remove a dimensão do array
+                state.dimensions.splice(index, 1);
+                
+                // Atualiza a interface
+                updateDimensionsList();
+                redrawDimensions();
+                
+                // Se era a primeira linha (de calibração), reseta o estado
+                if (index === 0 && state.dimensions.length > 0) {
+                    // Tenta manter o índice de conversão se possível
+                    if (!state.isFirstLine) {
+                        state.isFirstLine = false;
+                    } else {
+                        // Se não há mais linhas de calibração, reseta
+                        if (!state.dimensions.some(dim => dim.isCalibration)) {
+                            state.conversionIndex = null;
+                            state.isFirstLine = true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Atualiza a lista de dimensões
+        function updateDimensionsList() {
+            dimensionsContainer.innerHTML = '';
+            
+            state.dimensions.forEach((dim, index) => {
+                const item = document.createElement('div');
+                item.className = 'dimension-item';
+                
+                let realDistance = dim.pixelDistance;
+                if (state.conversionIndex && !state.isFirstLine) {
+                    realDistance = dim.pixelDistance / state.conversionIndex;
+                }
+                
+                item.innerHTML = `
+                    <div>#${index + 1}</div>
+                    <div>[${dim.start.x.toFixed(1)}, ${dim.start.y.toFixed(1)}]</div>
+                    <div>[${dim.end.x.toFixed(1)}, ${dim.end.y.toFixed(1)}]</div>
+                    <div>${realDistance.toFixed(2)} ${state.measureUnit}</div>
+                    <div><button onclick="removeDimension(${index});" class="modal-btn cancel-btn" id="cancel-btn">🗑️</button></div>
+                `;
+                
+                dimensionsContainer.appendChild(item);
+            });
+        }
+        
+        // Redesenha todas as dimensões
+        function redrawDimensions() {
+            // Limpa o canvas de desenho permanente
+            drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+            
+            state.dimensions.forEach(dim => {
+                // Desenha a linha
+                drawCtx.beginPath();
+                drawCtx.moveTo(dim.start.x, dim.start.y);
+                drawCtx.lineTo(dim.end.x, dim.end.y);
+                drawCtx.strokeStyle = state.lineColor;
+                drawCtx.lineWidth = state.lineWidth;
+                drawCtx.stroke();
+                
+                // Calcula o ponto médio
+                const midX = (dim.start.x + dim.end.x) / 2;
+                const midY = (dim.start.y + dim.end.y) / 2;
+                
+                // Calcula a distância real se disponível
+                let distance = dim.pixelDistance;
+                if (state.conversionIndex && !state.isFirstLine) {
+                    distance = dim.pixelDistance / state.conversionIndex;
+                }
+                
+                // Desenha o texto
+                drawCtx.fillStyle = state.lineColor;
+                drawCtx.font = 'bold 14px Arial';
+                drawCtx.fillText(`${distance.toFixed(2)} ${state.measureUnit}`, midX, midY - 10);
+            });
+        }
+        
+        // Abre o modal de seleção de cor
+        function openColorModal() {
+            colorModal.classList.add('active');
+        }
+        
+        // Fecha o modal de seleção de cor
+        function closeColorModal() {
+            colorModal.classList.remove('active');
+        }
+        
+        // Salva a cor selecionada
+        function saveColor() {
+            const selectedColor = document.querySelector('.color-option.selected').dataset.color;
+            state.lineColor = selectedColor;
+            closeColorModal();
+            redrawDimensions();
+        }
+        
+        // Atualiza a espessura da linha
+        function updateLineWidth() {
+            state.lineWidth = parseInt(lineWidthSelect.value);
+            redrawDimensions();
+        }
+        
+        // Atualiza a unidade de medida
+        function updateMeasureUnit() {
+            state.measureUnit = measureUnitSelect.value;
+            updateDimensionsList();
+            redrawDimensions();
+        }
+        
+        // Abre o modal de edição do JSON
+        function openJsonModal() {
+            if (state.dimensions.length === 0) {
+                alert('Não há dimensões para editar.');
+                return;
+            }
+            
+            // Formata o JSON para exibição
+            const jsonData = {
+                dimensions: state.dimensions,
+                conversionIndex: state.conversionIndex,
+                isFirstLine: state.isFirstLine,
+                lineColor: state.lineColor,
+                lineWidth: state.lineWidth,
+                measureUnit: state.measureUnit
+            };
+            
+            jsonTextarea.value = JSON.stringify(jsonData, null, 2);
+            jsonError.style.display = 'none';
+            jsonModal.classList.add('active');
+        }
+        
+        // Fecha o modal de edição do JSON
+        function closeJsonModal() {
+            jsonModal.classList.remove('active');
+        }
+        
+        // Salva as alterações do JSON
+        function saveJson() {
+            try {
+                const jsonData = JSON.parse(jsonTextarea.value);
+                
+                // Validação básica dos dados
+                if (!jsonData.dimensions || !Array.isArray(jsonData.dimensions)) {
+                    throw new Error('Formato inválido: dimensões não encontradas');
+                }
+                
+                // Atualiza o estado
+                state.dimensions = jsonData.dimensions;
+                state.conversionIndex = jsonData.conversionIndex || null;
+                state.isFirstLine = jsonData.isFirstLine !== undefined ? jsonData.isFirstLine : true;
+                state.lineColor = jsonData.lineColor || '#FF3B30';
+                state.lineWidth = jsonData.lineWidth || 3;
+                state.measureUnit = jsonData.measureUnit || 'mm';
+                
+                // Atualiza controles de UI
+                lineWidthSelect.value = state.lineWidth;
+                measureUnitSelect.value = state.measureUnit;
+                
+                // Atualiza a interface
+                updateDimensionsList();
+                redrawDimensions();
+                
+                // Fecha o modal
+                closeJsonModal();
+            } catch (error) {
+                jsonError.textContent = `Erro: ${error.message || 'Formato JSON inválido'}`;
+                jsonError.style.display = 'block';
+                
+                // Scroll para o erro
+                jsonError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+        
+        // Calcula a distância entre dois pontos
+        function calculateDistance(p1, p2) {
+            return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+        }
+        
+        // Calcula o ângulo entre dois pontos
+        function calculateAngle(p1, p2) {
+            const radians = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+            return Math.abs((radians * 180) / Math.PI);
+        }
+        
+        // Inicia a aplicação
+        window.onload = init;
+    </script>
+</body>
+</html>
