@@ -48,6 +48,7 @@
             background-color: #34495e;
             padding: 10px;
             gap: 15px;
+            flex-wrap: wrap;
         }
         
         .menu-control {
@@ -69,6 +70,7 @@
         .menu-control label {
             font-weight: 600;
             color: #2c3e50;
+            white-space: nowrap;
         }
         
         .menu-control select, .menu-control button {
@@ -94,6 +96,71 @@
         .color-btn:hover {
             background: linear-gradient(to right, #ff5252, #ff7e40);
             transform: scale(1.05);
+        }
+        
+        .tolerance-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 180px;
+        }
+        
+        .tolerance-slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .tolerance-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #2c3e50;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tolerance-input {
+            width: 50px;
+            padding: 6px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .tolerance-input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .tolerance-preview {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            background: #3498db;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tolerance-preview::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, 
+                rgba(255,255,255,0.8) 0%, 
+                rgba(255,255,255,0) 50%, 
+                rgba(0,0,0,0) 50%, 
+                rgba(0,0,0,0.8) 100%);
         }
         
         .image-area {
@@ -400,6 +467,13 @@
             margin-top: 10px;
             display: none;
         }
+        
+        .tolerance-info {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -432,6 +506,17 @@
                     <option value="m">m</option>
                 </select>
             </div>
+            
+            <div class="menu-control tolerance-control">
+                <label>Tolerância:</label>
+                <div class="tolerance-preview" id="tolerance-preview"></div>
+                <input type="range" id="tolerance-slider" class="tolerance-slider" min="0" max="255" value="30">
+                <input type="number" id="tolerance-input" class="tolerance-input" min="0" max="255" value="30">
+            </div>
+        </div>
+        
+        <div class="tolerance-info">
+            Ajuste a sensibilidade para detecção automática de linhas (0 = exato, 255 = qualquer cor)
         </div>
         
         <div class="instructions">
@@ -439,6 +524,7 @@
             <ul>
                 <li>Cole uma imagem na área abaixo usando Ctrl+V ou o menu de contexto</li>
                 <li>Clique em dois pontos da imagem para criar uma linha de medição</li>
+                <li>Clique com o botão direito para acessar recursos avançados</li>
                 <li>A primeira linha será usada para calibrar as medidas reais</li>
                 <li>Linhas subsequentes serão calculadas automaticamente</li>
                 <li>Use os controles acima para personalizar a medição</li>
@@ -471,7 +557,6 @@
                 <div>Origem</div>
                 <div>Fim</div>
                 <div>Dimensão</div>
-                <div>Remover</div>
             </div>
             <div id="dimensions-container"></div>
         </div>
@@ -536,7 +621,7 @@
             </div>
         </div>
     </div>
-
+    
     <script>
         // Elementos DOM
         const imageArea = document.getElementById('image-area');
@@ -548,6 +633,9 @@
         const colorBtn = document.getElementById('color-btn');
         const lineWidthSelect = document.getElementById('line-width');
         const measureUnitSelect = document.getElementById('measure-unit');
+        const toleranceSlider = document.getElementById('tolerance-slider');
+        const toleranceInput = document.getElementById('tolerance-input');
+        const tolerancePreview = document.getElementById('tolerance-preview');
         const dimensionModal = document.getElementById('dimension-modal');
         const colorModal = document.getElementById('color-modal');
         const jsonModal = document.getElementById('json-modal');
@@ -574,7 +662,10 @@
             startPoint: null,
             tempPoint: null,
             dimensions: [],
-            isFirstLine: true
+            isFirstLine: true,
+            colorTolerance: 30,
+            imageScale: 1,
+            isDetectingLine: false
         };
         
         // Inicialização
@@ -584,9 +675,11 @@
             
             // Event Listeners
             document.addEventListener('paste', handleImagePaste);
+            
+            
             drawCanvas.addEventListener('mousedown', startMeasurement);
             drawCanvas.addEventListener('mousemove', drawTempLine);
-            drawCanvas.addEventListener('mouseup', finishMeasurement);
+           // drawCanvas.addEventListener('mouseup', finishMeasurement);
             colorBtn.addEventListener('click', openColorModal);
             lineWidthSelect.addEventListener('change', updateLineWidth);
             measureUnitSelect.addEventListener('change', updateMeasureUnit);
@@ -597,12 +690,23 @@
             jsonEditBtn.addEventListener('click', openJsonModal);
             jsonSaveBtn.addEventListener('click', saveJson);
             jsonCancelBtn.addEventListener('click', closeJsonModal);
+            toleranceSlider.addEventListener('input', updateToleranceSlider);
+            toleranceInput.addEventListener('input', updateToleranceInput);
+            toleranceInput.addEventListener('change', validateToleranceInput);
             
-             document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' || event.keyCode === 27) {
-                // Ação a ser executada quando a tecla Esc for pressionada
-                cancelMeasurement();
-            }
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' || event.keyCode === 27) {
+                    // Ação a ser executada quando a tecla Esc for pressionada
+                    cancelMeasurement();
+                } else if (event.ctrlKey) {
+                    state.isDetectingLine=true;
+                }
+            });
+
+            document.addEventListener('keyup', function(event) {
+                if (event.ctrlKey) {
+                    state.isDetectingLine=false;
+                }
             });
 
             // Configurar seletores de cor
@@ -614,6 +718,47 @@
                     this.classList.add('selected');
                 });
             });
+            
+            // Atualizar preview da tolerância
+            updateTolerancePreview();
+        }
+        
+        // Atualizar tolerância pelo slider
+        function updateToleranceSlider() {
+            state.colorTolerance = parseInt(toleranceSlider.value);
+            toleranceInput.value = state.colorTolerance;
+            updateTolerancePreview();
+        }
+        
+        // Atualizar tolerância pelo input
+        function updateToleranceInput() {
+            state.colorTolerance = parseInt(toleranceInput.value) || 0;
+            toleranceSlider.value = state.colorTolerance;
+            updateTolerancePreview();
+        }
+        
+        // Validar input de tolerância
+        function validateToleranceInput() {
+            let value = parseInt(toleranceInput.value);
+            
+            if (isNaN(value)) {
+                value = 30;
+            } else if (value < 0) {
+                value = 0;
+            } else if (value > 255) {
+                value = 255;
+            }
+            
+            state.colorTolerance = value;
+            toleranceInput.value = value;
+            toleranceSlider.value = value;
+            updateTolerancePreview();
+        }
+        
+        // Atualizar visualização da tolerância
+        function updateTolerancePreview() {
+            const alpha = state.colorTolerance / 255;
+            tolerancePreview.style.opacity = 1 - alpha * 0.7;
         }
         
         // Manipulação de colagem de imagem
@@ -661,12 +806,16 @@
                 const ratio = maxWidth / width;
                 width = maxWidth;
                 height = height * ratio;
+                state.imageScale = ratio;
+            } else {
+                state.imageScale = 1;
             }
             
             if (height > maxHeight) {
                 const ratio = maxHeight / height;
                 height = maxHeight;
                 width = width * ratio;
+                state.imageScale = ratio;
             }
             
             // Centraliza a imagem
@@ -688,7 +837,10 @@
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             
-            if (!state.isMeasuring) {
+            if(state.isDetectingLine){
+                state.startPoint = { x, y };
+                startLineDetection();
+            } else if (!state.isMeasuring) {
                 // Primeiro clique
                 state.isMeasuring = true;
                 state.startPoint = { x, y };
@@ -757,6 +909,7 @@
             // Atualiza a interface
             updateDimensionsList();
             
+            
             // Reseta para próxima medição
             state.isMeasuring = false;
             state.startPoint = null;
@@ -804,8 +957,8 @@
             dimensionModal.classList.remove('active');
             drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
         }
-
-        // Função para remover uma dimensão pelo índice
+        
+         // Função para remover uma dimensão pelo índice
         function removeDimension(index) {
             if (index >= 0 && index < state.dimensions.length) {
                 // Remove a dimensão do array
@@ -980,6 +1133,90 @@
                 // Scroll para o erro
                 jsonError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
+        }
+        
+       function startLineDetection() {
+            if (!state.image) return;
+            
+            detectLine(state.startPoint.x, state.startPoint.y);
+        }
+        
+        // Função para detectar linha automaticamente
+        function detectLine(x, y) {
+            // Obter a cor de referência no ponto clicado
+            const pixel = imageCtx.getImageData(x, y, 1, 1).data;
+            const r = pixel[0], g = pixel[1], b = pixel[2], a = pixel[3];
+            
+            // Função para verificar similaridade de cor
+            function isSimilarColor(r2, g2, b2, a2) {
+                return Math.abs(r - r2) <= state.colorTolerance && 
+                       Math.abs(g - g2) <= state.colorTolerance && 
+                       Math.abs(b - b2) <= state.colorTolerance &&
+                       Math.abs(a - a2) <= state.colorTolerance;
+            }
+            
+            // Detectar linha horizontal
+            let left = x, right = x;
+            // Para esquerda
+            for (let i = x; i >= 0; i--) {
+                const pixelData = imageCtx.getImageData(i, y, 1, 1).data;
+                if (!isSimilarColor(pixelData[0], pixelData[1], pixelData[2], pixelData[3])) {
+                    break;
+                }
+                left = i;
+            }
+            // Para direita
+            for (let i = x; i < imageCanvas.width; i++) {
+                const pixelData = imageCtx.getImageData(i, y, 1, 1).data;
+                if (!isSimilarColor(pixelData[0], pixelData[1], pixelData[2], pixelData[3])) {
+                    break;
+                }
+                right = i;
+            }
+            const horizontalLength = right - left;
+            
+            // Detectar linha vertical
+            let top = y, bottom = y;
+            // Para cima
+            for (let j = y; j >= 0; j--) {
+                const pixelData = imageCtx.getImageData(x, j, 1, 1).data;
+                if (!isSimilarColor(pixelData[0], pixelData[1], pixelData[2], pixelData[3])) {
+                    break;
+                }
+                top = j;
+            }
+            // Para baixo
+            for (let j = y; j < imageCanvas.height; j++) {
+                const pixelData = imageCtx.getImageData(x, j, 1, 1).data;
+                if (!isSimilarColor(pixelData[0], pixelData[1], pixelData[2], pixelData[3])) {
+                    break;
+                }
+                bottom = j;
+            }
+            const verticalLength = bottom - top;
+            
+            // Decidir se a linha é horizontal ou vertical (a maior)
+            let start, end;
+            if (horizontalLength > verticalLength) {
+                start = { x: left, y: y };
+                end = { x: right, y: y };
+            } else {
+                start = { x: x, y: top };
+                end = { x: x, y: bottom };
+            }
+            
+            // Configurar os pontos para a nova dimensão
+            state.startPoint = start;
+            state.tempPoint = end;
+            
+            // Se for a primeira linha, abrir o modal para calibração
+            if (state.isFirstLine) {
+                dimensionModal.classList.add('active');
+            } else {
+                finishMeasurement();
+            }
+            
+            state.isDetectingLine = false;
         }
         
         // Calcula a distância entre dois pontos
