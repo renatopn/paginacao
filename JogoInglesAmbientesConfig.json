@@ -110,7 +110,8 @@
       "lamp",
       "sofa",
       "tree",
-      "table"
+      "table", 
+      "book"
     ],
     "actorActions": [
       {
@@ -143,7 +144,8 @@
       "mirror",
       "sofa",
       "chair",
-      "table"
+      "table",
+      "book",
     ],
     "actorActions": [
       {
