@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Desafio da Tabuada! - Para o Campeão!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap');
+
+        :root {
+            --cor-principal: #FF6F61; /* Vermelho-laranja infantil */
+            --cor-secundaria: #4CAF50; /* Verde de sucesso */
+            --cor-erro: #F44336; /* Vermelho de erro */
+            --cor-fundo: #FFF8E1; /* Amarelo claro suave */
+            --cor-texto: #333;
+            --cor-cartao: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif; /* Fonte infantil e amigável */
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background-image: linear-gradient(135deg, #FFE0B2 0%, #FFCCBC 100%);
+        }
+
+        .container {
+            background-color: var(--cor-cartao);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            border: 5px solid var(--cor-principal);
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            60% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            color: var(--cor-principal);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px #FFEB3B;
+        }
+
+        p#instrucao {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .question-box {
+            background-color: #E1F5FE; /* Azul claro para a pergunta */
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #question {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--cor-principal);
+            margin: 0;
+        }
+
+        #answer {
+            padding: 15px;
+            font-size: 1.5em;
+            width: 80%;
+            max-width: 150px;
+            border: 3px solid #B3E5FC;
+            border-radius: 10px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+            margin-top: 20px;
+        }
+
+        #answer:focus {
+            border-color: var(--cor-principal);
+            box-shadow: 0 0 8px rgba(255, 111, 97, 0.5);
+        }
+
+        button {
+            background-color: var(--cor-secundaria);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            margin-left: 10px;
+            box-shadow: 0 5px #388E3C; /* Sombra 3D */
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #66BB6A;
+        }
+
+        button:active {
+            box-shadow: 0 2px #388E3C;
+            transform: translateY(3px); /* Efeito de clique */
+        }
+
+        #feedback-box {
+            min-height: 50px;
+            padding: 15px;
+            margin-top: 25px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: none; /* Escondido inicialmente */
+            transition: all 0.5s ease-in-out;
+            animation: fadeIn 0.5s;
+        }
+
+        .correct {
+            background-color: #E8F5E9; /* Fundo verde claro */
+            color: var(--cor-secundaria);
+            border: 2px solid var(--cor-secundaria);
+        }
+
+        .incorrect {
+            background-color: #FFEBEE; /* Fundo vermelho claro */
+            color: var(--cor-erro);
+            border: 2px solid var(--cor-erro);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        #score {
+            margin-top: 20px;
+            font-size: 1.3em;
+            padding: 10px;
+            background-color: #FFFDE7;
+            border-radius: 10px;
+            border: 1px dashed #FFD740;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>⭐ Super Desafio da Tabuada! ⭐</h1>
+        <p id="instrucao">Vamos praticar as tabuadas do **2, 3, 4 e 5**! Você consegue!</p>
+
+        <div id="score">
+            Acertos: <span id="correct-count">0</span> / Total: <span id="total-count">0</span>
+        </div>
+
+        <div class="question-box">
+            <p id="question">Carregando...</p>
+        </div>
+
+        <div class="input-area">
+            <input type="number" id="answer" placeholder="Sua resposta" autofocus>
+            <button id="submit-btn" onclick="checkAnswer()">Responder!</button>
+        </div>
+
+        <div id="feedback-box">
+            </div>
+    </div>
+
+    <script>
+        const tabuadasPermitidas = [2, 3, 4, 5];
+        let num1 = 0;
+        let num2 = 0;
+        let correctAnswer = 0;
+        let correctCount = 0;
+        let totalCount = 0;
+        let isAnswered = false; // Para controlar se a questão atual já foi respondida
+
+        const feedbackMessages = {
+            success: [
+                "🏆 Uau! Resposta correta! Você é um gênio! ✨",
+                "🥳 Parabéns, campeão(ã)! Acertou em cheio! 💯",
+                "✅ Isso mesmo! Seu cérebro está turbinado! 💡",
+                "⭐ Fantástico! Que conta rápida! Próxima! 🚀",
+                "🎉 Mestre da Tabuada! Continua assim! 💪",
+                "👍 Perfeito! Você acertou! Muito bem! 🌟"
+            ],
+            error: [
+                "😔 Quase lá! Tenta mais uma vez, você consegue! 💖",
+                "🤔 Opa! Deu um errinho. Pense um pouco mais e corrija! ✏️",
+                "Keep going! Não desista! Recalcule e tente de novo! 🔄",
+                "A tabuada é um desafio. Revise e me diga a resposta certa! 🙏",
+                "Calma! Um pequeno erro não te para. Tenta de novo com atenção! 👀"
+            ]
+        };
+
+        const questionEl = document.getElementById('question');
+        const answerInput = document.getElementById('answer');
+        const feedbackBox = document.getElementById('feedback-box');
+        const submitBtn = document.getElementById('submit-btn');
+        const correctCountEl = document.getElementById('correct-count');
+        const totalCountEl = document.getElementById('total-count');
+
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generateQuestion() {
+            // Escolhe um número base da lista (2, 3, 4, 5)
+            num1 = getRandomElement(tabuadasPermitidas);
+            // Escolhe o segundo número (de 1 a 10)
+            num2 = Math.floor(Math.random() * 9) + 2; // de 2 a 10 para evitar 0 e 1 no segundo fator
+            correctAnswer = num1 * num2;
+
+            questionEl.textContent = `${num1} x ${num2} = ?`;
+            answerInput.value = '';
+            feedbackBox.style.display = 'none';
+            feedbackBox.className = '';
+            submitBtn.textContent = 'Responder!';
+            isAnswered = false;
+            answerInput.disabled = false;
+            answerInput.focus();
+        }
+
+        function updateScore() {
+            correctCountEl.textContent = correctCount;
+            totalCountEl.textContent = totalCount;
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseInt(answerInput.value);
+
+            if (isNaN(userAnswer)) {
+                alert("Por favor, digite um número na resposta.");
+                answerInput.focus();
+                return;
+            }
+
+            feedbackBox.style.display = 'block';
+
+            if (!isAnswered) {
+                totalCount++; // Aumenta o total apenas no primeiro palpite
+            }
+
+            if (userAnswer === correctAnswer) {
+                if (!isAnswered) {
+                    correctCount++;
+                }
+                
+                feedbackBox.className = 'correct';
+                feedbackBox.innerHTML = getRandomElement(feedbackMessages.success);
+                
+                // Prepara para a próxima pergunta
+                isAnswered = true;
+                answerInput.disabled = true;
+                submitBtn.textContent = 'Próxima Conta!';
+                submitBtn.onclick = nextQuestion; // Muda a função do botão
+            } else {
+                feedbackBox.className = 'incorrect';
+                feedbackBox.innerHTML = getRandomElement(feedbackMessages.error);
+                
+                // Permite a correção na mesma pergunta
+                isAnswered = false; // Não marca como "respondida" para manter o score
+                submitBtn.textContent = 'Tentar Novamente';
+                submitBtn.onclick = checkAnswer; // Mantém a função de checar
+            }
+
+            updateScore();
+        }
+
+        function nextQuestion() {
+            // Volta a função do botão para checar a resposta
+            submitBtn.onclick = checkAnswer; 
+            generateQuestion();
+        }
+
+        // Inicia a primeira pergunta quando a página carrega
+        window.onload = generateQuestion;
+        
+        // Permite usar a tecla Enter para responder
+        answerInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Impede o comportamento padrão do Enter
+                document.getElementById('submit-btn').click();
+            }
+        });
+
+    </script>
+
+</body>
+</html>
